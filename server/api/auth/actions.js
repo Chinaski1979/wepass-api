@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Helpers
 import { TOKENS_TIME } from 'helpers/constants';
-import { generateToken } from 'helpers/tokens';
+import { generateToken, verifyToken } from 'helpers/tokens';
 
 // Models
 import UserModel from './userModel';
@@ -53,6 +53,42 @@ export default class AuthActions {
       res.ok(null, Object.assign(tokens, { user : _.omit(user, ['password']) }), 'Log in successful.');
     } catch (err) {
       res.badRequest(err, null, 'Error logging in.');
+    }
+  }
+
+  /**
+   * @api {post} /refreshToken Refresh tokens
+   * @apiName refreshToken
+   * @apiGroup auth
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {String} token
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YWJjMTU1MzBiMGRmNDAwMz...",
+       "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YWJjMTU1MzBiMGRmNDAw..."
+     }
+  */
+  async refreshToken (req, res) {
+    try {
+      const { token } = req.body;
+      const decoded = await verifyToken(token, false);
+      if (decoded.content.type !== 'refresh') {
+        throw new Error('Not a refresh token');
+      }
+      const signInfo = _.omit(decoded.content, ['type', 'iat', 'exp']);
+      const newTokens = {
+        token   : generateToken(signInfo, TOKENS_TIME.AUTH),
+        refresh : generateToken(_.assign(signInfo, { type : 'refresh'}), TOKENS_TIME.REFRESH),
+      };
+      res.ok(null, newTokens, 'Tokens successfully refreshed');
+    } catch (err) {
+      res.badRequest(err, null, 'Error refreshing tokens');
     }
   }
 }

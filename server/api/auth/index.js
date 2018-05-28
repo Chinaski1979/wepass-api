@@ -6,7 +6,7 @@ const actions = new Actions();
 
 // POST Methods
 // router.post('/createAccount', actions.createAccount);
-// router.post('/refreshToken', actions.refreshToken);
+router.post('/refreshToken', actions.refreshToken);
 router.post('/login', actions.login);
 
 // Get Methods

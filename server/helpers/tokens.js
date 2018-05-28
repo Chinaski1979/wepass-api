@@ -1,20 +1,12 @@
 import JWT from 'jsonwebtoken';
+import _ from 'lodash';
+import { PUBLIC_ROUTES } from 'helpers/constants';
+
 const tokenSecret = process.env.TOKEN_SECRET;
 
 export function generateToken (payload, time) {
   return JWT.sign(payload, tokenSecret, {
     expiresIn : time,
-  });
-}
-
-export function getParts (authorization) {
-  return new Promise((resolve) => {
-    const parts = authorization.split(' ');
-    resolve({
-      scheme : parts[0],
-      token  : parts[1],
-      size   : parts.length,
-    });
   });
 }
 
@@ -31,4 +23,35 @@ export function verifyToken (token, ignoreTime) {
       }
     });
   });
+}
+
+function isPublicRoute (routes, path) {
+  return _.includes(routes, path);
+}
+
+function getParts (authorization) {
+  const parts = authorization.split(' ');
+  return {
+    scheme : parts[0],
+    token  : parts[1],
+    size   : parts.length,
+  };
+}
+
+export async function authMidleware (req, res, next) {
+  try {
+    const parts = req.headers.authorization ? getParts(req.headers.authorization) : null;
+    const hasBearer = _.has(parts, 'scheme') ? /^Bearer$/i.test(parts.scheme) : null;
+    if (!_.isNull(parts) && hasBearer) {
+      const { content } = await verifyToken(parts.token);
+      _.set(req, 'user', content);
+      next();
+    } else if (isPublicRoute(PUBLIC_ROUTES, req.path)) {
+      next();
+    } else {
+      res.unauthorized(null, null, 'Unauthorized transaction *.*');
+    }
+  } catch (err) {
+    res.unauthorized(err, null, 'Invalid request!');
+  }
 }

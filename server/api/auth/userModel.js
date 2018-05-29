@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   profilePic   : String,
   gender       : { type : String, enum : genderTypes },
   addresses    : [{type : mongoose.Schema.Types.ObjectId, ref : 'address'}],
+  trial        : Boolean,
   createdAt    : { type : Date, default : Date.now },
 });
 

@@ -8,6 +8,7 @@ const actions = new Actions();
 // router.post('/createAccount', actions.createAccount);
 router.post('/refreshToken', actions.refreshToken);
 router.post('/login', actions.login);
+router.post('/trialRegistration', actions.trialRegistration);
 
 // Get Methods
 // router.post('/getMe', actions.getMe);

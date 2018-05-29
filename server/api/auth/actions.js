@@ -1,5 +1,9 @@
 import _ from 'lodash';
 
+// Services
+import { createUser } from './services';
+import { createNewCompany } from './company/services';
+
 // Helpers
 import { TOKENS_TIME } from 'helpers/constants';
 import { generateToken, verifyToken } from 'helpers/tokens';
@@ -14,7 +18,12 @@ export default class AuthActions {
    * @apiGroup auth
    * @apiVersion 1.0.0
    *
+   * @apiUse authorizationHeaders
    * @apiUse applicationError
+   *
+   * @apiParam {String} email [optional]
+   * @apiParam {String} phoneNumber [optional]
+   * @apiParam {String} password
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK
@@ -89,6 +98,45 @@ export default class AuthActions {
       res.ok(null, newTokens, 'Tokens successfully refreshed');
     } catch (err) {
       res.badRequest(err, null, 'Error refreshing tokens');
+    }
+  }
+
+  /**
+   * @api {post} /trialRegistration Self trial registration
+   * @apiName trialRegistration
+   * @apiGroup auth
+   * @apiVersion 1.0.0
+   *
+   * @apiUse applicationError
+   *
+   * @apiParam {String} firstName
+   * @apiParam {String} lastName
+   * @apiParam {String} email
+   * @apiParam {String} password
+   * @apiParam {String} companyName
+   *
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 201 CREATED
+     {
+       "_id": "5abc15530b0df40032fdd928",
+       "firstName": "Jack",
+       "lastName": "White",
+       "email": "white@gmail.com",
+       "role": "White",
+       "company": "5abc15530b0df40032fdd928",
+       "trial": "White"
+     }
+  */
+  async trialRegistration (req, res) {
+    try {
+      const { companyName, firstName, lastName, email, password } = req.body;
+      const newCompany = await createNewCompany({ name : companyName });
+      const userDetails = { firstName, lastName, email, password, role : 'admin', trial : true, company : newCompany._id };
+      const newUser = await createUser(userDetails);
+      res.created(null, newUser, 'Created trial account successfully');
+    } catch (err) {
+      res.badRequest(err, null, 'Error creating trial account');
     }
   }
 }

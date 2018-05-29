@@ -2,7 +2,7 @@
 import { createNewCompany } from './services';
 
 // Models
-import UserModel from './auth/userModel';
+import UserModel from '../auth/userModel';
 import CompanyModel from './companyModel';
 
 export default class CompanyActions {

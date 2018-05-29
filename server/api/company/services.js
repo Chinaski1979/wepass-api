@@ -2,7 +2,7 @@
 import CompanyModel from './companyModel';
 
 // Validations
-import { companyValidation } from 'validations';
+import { companyValidation } from './validations';
 
 export function createNewCompany (companyDetails) {
   return new Promise(async (resolve, reject) => {

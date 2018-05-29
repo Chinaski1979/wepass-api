@@ -1,11 +1,14 @@
 // Services
 import { createNewCompany } from './services';
 
+// Models
+import UserModel from './auth/userModel';
+
 export default class CompanyActions {
   /**
-   * @api {post} /refreshToken Refresh tokens
-   * @apiName refreshToken
-   * @apiGroup auth
+   * @api {post} /create Create a company
+   * @apiName createCompany
+   * @apiGroup company
    * @apiVersion 1.0.0
    *
    * @apiUse authorizationHeaders
@@ -31,12 +34,50 @@ export default class CompanyActions {
        "email"       : residencialX@gmail.com
      }
   */
-  async createCompany (req, res) {
+  async create (req, res) {
     try {
       const newCompany = await createNewCompany(req.body);
       res.created(null, newCompany, 'Created new company successfully');
     } catch (err) {
       res.badRequest(err, null, 'Error creating new company');
+    }
+  }
+
+  /**
+   * @api {post} /addAdmin Add admin to a company
+   * @apiName addAdmin
+   * @apiGroup company
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {String} userId
+   * @apiParam {String} companyId
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 201 CREATED
+     {
+        "newCompanyAdded": true
+     }
+  */
+  async addAdmin(req, res) {
+    try {
+      const { userId, companyId } = req.body;
+      const user = await UserModel.findOne({ _id : userId });
+      if (user.role === 'admin', user.role === 'superAdmin') {
+        if (user.company) {
+          res.badRequest({ message : 'User has a company already.' }, null, 'Error adding company to Admin');
+        }
+        user.company = companyId;
+        await user.save();
+        res.ok(null, user, 'Added new admin to company successfully');
+      } else {
+        res.badRequest({ message : 'User is not an admin.'}, null, 'Error adding company to Admin');
+      }
+
+    } catch (err) {
+      res.badRequest(err, null, 'Error adding admin to company');
     }
   }
 }

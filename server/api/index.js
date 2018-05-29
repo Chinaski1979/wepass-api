@@ -38,5 +38,6 @@ const router = new Router();
 // API endpoints.
 router.all('*', authMidleware);
 router.use('/auth', require('./auth').default);
+router.use('/company', require('./company').default);
 
 export default router;

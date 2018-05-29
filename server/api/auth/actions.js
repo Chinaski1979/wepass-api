@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Services
 import { createUser } from './services';
-import { createNewCompany } from './company/services';
+import { createNewCompany } from '../company/services';
 
 // Helpers
 import { TOKENS_TIME } from 'helpers/constants';

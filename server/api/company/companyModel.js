@@ -7,7 +7,7 @@ const companySchema = new mongoose.Schema({
   address     : String,
   province    : String,
   country     : { type : String, default : 'CR' },
-  email       : { type : String, unique : true, lowercase : true, trim : true },
+  email       : { type : String, lowercase : true, trim : true },
 });
 
 export default mongoose.model('company', companySchema);

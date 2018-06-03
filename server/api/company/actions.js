@@ -54,8 +54,8 @@ export default class CompanyActions {
    * @apiUse authorizationHeaders
    * @apiUse applicationError
    *
-   * @apiParam {String} userId
-   * @apiParam {String} companyId
+   * @apiParam {String} userId - Mongo _id
+   * @apiParam {String} companyId - Mongo _id
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 201 CREATED
@@ -92,7 +92,6 @@ export default class CompanyActions {
    * @apiUse authorizationHeaders
    * @apiUse applicationError
    *
-   * @apiParam {String} companyId
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK

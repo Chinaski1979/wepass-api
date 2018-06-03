@@ -6,5 +6,6 @@ const actions = new Actions();
 
 // POST Methods
 router.post('/create', actions.create);
+router.post('/addAdmin', actions.addAdmin);
 
 export default router;

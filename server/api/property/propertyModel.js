@@ -8,6 +8,7 @@ const propertysSchema = new mongoose.Schema({
   province    : String,
   country     : { type : String, default : 'CR' },
   coordinates : { type : String, lowercase : true, trim : true },
+  admins      : [{type : mongoose.Schema.Types.ObjectId, ref : 'user'}],
   company     : [{type : mongoose.Schema.Types.ObjectId, ref : 'company'}],
 });
 

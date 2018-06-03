@@ -160,7 +160,7 @@ export default class AuthActions {
    * @apiParam {String} email
    * @apiParam {String} role
    * @apiParam {String} gender
-   * @apiParam {String} company
+   * @apiParam {String} company - Mongo _id of the company
    *
    *
    * @apiSuccessExample {json} Success

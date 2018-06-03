@@ -6,7 +6,7 @@ import PropertyModel from './propertyModel';
 
 export default class PropertyActions {
   /**
-   * @api {post} /create Create a property
+   * @api {post} /property/create Create a property
    * @apiName create
    * @apiGroup property
    * @apiVersion 1.0.0
@@ -15,11 +15,13 @@ export default class PropertyActions {
    * @apiUse applicationError
    *
    * @apiParam {String} name
-   * @apiParam {String} label [optional]
-   * @apiParam {String} phoneNumber [optional]
-   * @apiParam {String} address [optional]
-   * @apiParam {String} country [optional]
-   * @apiParam {String} email [optional]
+   * @apiParam {String} label
+   * @apiParam {String} address
+   * @apiParam {String} city
+   * @apiParam {String} province
+   * @apiParam {String} country
+   * @apiParam {Object} coordinates - {lat: "9.9439182", long: "-84.0431748"}
+   * @apiParam {String} company - Mongo _id
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 201 CREATED
@@ -28,6 +30,7 @@ export default class PropertyActions {
        "name"        : "Residencial X",
        "label"       : "Some string",
        "address"     : "Sabanilla, San Pedro, San José",
+       "city"        : "San Pedro"
        "province"    : "San José",
        "country"     : "CR",
        "coordinates" : {"lat": "9.9439182", "long": "-84.0431748"},
@@ -40,7 +43,35 @@ export default class PropertyActions {
       const newCompany = await PropertyModel.create(propertyValidated);
       res.created(null, newCompany, 'Created new company successfully');
     } catch (err) {
-      res.badRequest(err, null, 'Error creating new company');
+      res.badRequest(err.message, null, 'Error creating new company');
+    }
+  }
+
+  /**
+   * @api {post} /property/addAdmin Add an admin to a property
+   * @apiName addAdmin
+   * @apiGroup property
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {String} propertyId - Mongo _id
+   * @apiParam {String} adminId - Mongo _id
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+        "updated": true
+     }
+  */
+  async addAdmin (req, res) {
+    try {
+      const { propertyId, adminId } = req.body;
+      await PropertyModel.update({ _id : propertyId }, { $push : { admins : adminId }});
+      res.ok(null, { updated : true }, 'Created new company successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error creating new company');
     }
   }
 }

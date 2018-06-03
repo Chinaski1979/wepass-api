@@ -6,11 +6,17 @@
   "scripts": {
     "start": "nodemon ./server",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "apidoc -i server/api -o server/docs",
     "lint": "eslint ./server"
+  },
+  "apidoc": {
+    "title": "Wepass API documentation",
+    "url": "https://api.wepass.com/docs/index.html"
   },
   "author": "Jorge Cascante",
   "license": "ISC",
   "dependencies": {
+    "apidoc": "0.17.6",
     "app-module-path": "2.2.0",
     "axios": "0.18.0",
     "babel-polyfill": "6.26.0",

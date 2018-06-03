@@ -9,6 +9,9 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${proc
   if (err) console.log(chalk.red(`MONGO: ${err.message}`));
 });
 
+// Static route for documentation
+app.use('/docs', express.static(`${__dirname}/docs`));
+
 require('./config/express').default(app);
 require('./config/routes').default(app);
 

@@ -11,7 +11,7 @@
   },
   "apidoc": {
     "title": "Wepass API documentation",
-    "url": "https://api.wepass.com/docs/index.html"
+    "url": "https://api.wepass.com"
   },
   "author": "Jorge Cascante",
   "license": "ISC",

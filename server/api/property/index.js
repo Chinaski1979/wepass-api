@@ -6,10 +6,5 @@ const actions = new Actions();
 
 // POST Methods
 router.post('/create', actions.create);
-router.post('/addAdmin', actions.addAdmin);
-
-// Get Methods
-router.get('/:companyId', actions.getById);
-router.get('/:companyId/properties', actions.getProperties);
 
 export default router;

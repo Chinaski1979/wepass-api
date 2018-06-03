@@ -8,12 +8,15 @@ import { createNewCompany } from '../company/services';
 import { TOKENS_TIME } from 'helpers/constants';
 import { generateToken, verifyToken } from 'helpers/tokens';
 
+// Validations
+import { userValidation } from './validations';
+
 // Models
 import UserModel from './userModel';
 
 export default class AuthActions {
   /**
-   * @api {post} /login User log in
+   * @api {post} /auth/login User log in
    * @apiName login
    * @apiGroup auth
    * @apiVersion 1.0.0
@@ -61,12 +64,12 @@ export default class AuthActions {
       };
       res.ok(null, Object.assign(tokens, { user : _.omit(user, ['password']) }), 'Log in successful.');
     } catch (err) {
-      res.badRequest(err, null, 'Error logging in.');
+      res.badRequest(err.message, null, 'Error logging in.');
     }
   }
 
   /**
-   * @api {post} /refreshToken Refresh tokens
+   * @api {post} /auth/refreshToken Refresh tokens
    * @apiName refreshToken
    * @apiGroup auth
    * @apiVersion 1.0.0
@@ -97,12 +100,12 @@ export default class AuthActions {
       };
       res.ok(null, newTokens, 'Tokens successfully refreshed');
     } catch (err) {
-      res.badRequest(err, null, 'Error refreshing tokens');
+      res.badRequest(err.message, null, 'Error refreshing tokens');
     }
   }
 
   /**
-   * @api {post} /trialRegistration Self trial registration
+   * @api {post} /auth/trialRegistration Self trial registration
    * @apiName trialRegistration
    * @apiGroup auth
    * @apiVersion 1.0.0
@@ -123,9 +126,9 @@ export default class AuthActions {
        "firstName": "Jack",
        "lastName": "White",
        "email": "white@gmail.com",
-       "role": "White",
+       "role": "Admin",
        "company": "5abc15530b0df40032fdd928",
-       "trial": "White"
+       "trial": "true"
      }
   */
   async trialRegistration (req, res) {
@@ -136,7 +139,53 @@ export default class AuthActions {
       const newUser = await createUser(userDetails);
       res.created(null, newUser, 'Created trial account successfully');
     } catch (err) {
-      res.badRequest(err, null, 'Error creating trial account');
+      res.badRequest(err.message, null, 'Error creating trial account');
+    }
+  }
+
+  /**
+   * @api {post} /auth/createAccount Create a new user account
+   * @apiName createAccount
+   * @apiGroup auth
+   * @apiVersion 1.0.0
+   *
+   * @apiUse applicationError
+   *
+   * @apiParam {String} firstName
+   * @apiParam {String} lastName
+   * @apiParam {String} email
+   * @apiParam {String} password
+   * @apiParam {String} vehiclePlate
+   * @apiParam {String} phoneNumber
+   * @apiParam {String} email
+   * @apiParam {String} role
+   * @apiParam {String} gender
+   * @apiParam {String} company
+   *
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 201 CREATED
+     {
+       "_id": "5abc15530b0df40032fdd928",
+       "firstName": "Jack",
+       "lastName": "White",
+       "vehiclePlate": "AAA-111",
+       "phoneNumber": "24329086",
+       "email": "white@gmail.com",
+       "role": "Admin",
+       "gender": "Male",
+       "company": "5abc15530b0df40032fdd928",
+       "trial": false
+     }
+  */
+
+  async createAccount (req, res) {
+    try {
+      const userValidated = await userValidation(req.body);
+      const newAccount = createUser(userValidated);
+      res.created(null, newAccount, 'Created account successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error creating account');
     }
   }
 }

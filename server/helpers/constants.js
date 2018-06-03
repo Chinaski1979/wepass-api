@@ -5,5 +5,7 @@ module.exports = {
   },
   PUBLIC_ROUTES : [
     '/auth/login',
+    '/auth/createAccount',
+    '/auth/trialRegistration',
   ],
 };

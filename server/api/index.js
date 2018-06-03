@@ -39,5 +39,6 @@ const router = new Router();
 router.all('*', authMidleware);
 router.use('/auth', require('./auth').default);
 router.use('/company', require('./company').default);
+router.use('/property', require('./property').default);
 
 export default router;

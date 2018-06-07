@@ -40,7 +40,36 @@ export default class ModulesActions {
   }
 
   /**
-   * @api {post} /units/addOcupant Create a new unit
+   * @api {get} /units/byParentModule/:moduleId Get property modules
+   * @apiName byParentModule
+   * @apiGroup units
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       "_id": "5abc15530b0df40032fdd928",
+       "company": "66bc15530fjhg60032gfd666",
+       "parentProperty": "22bc15530fj4i40032gfd956",
+       "parentModule": "aa1c1553zzd4i40032gfd767",
+       "identifier": "1",
+       "ocupants": ["asac1553fhdjeyi40032gfd999"]
+     }
+  */
+  async byParentModule (req, res) {
+    try {
+      const moduleUnits = await UnitModel.find({ parentModule : req.params.moduleId });
+      res.ok(null, moduleUnits, 'Successfully retrieved module units');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error retrieving module units');
+    }
+  }
+
+  /**
+   * @api {post} /units/addOcupant Add occupant
    * @apiName addOcupant
    * @apiGroup units
    * @apiVersion 1.0.0
@@ -52,7 +81,7 @@ export default class ModulesActions {
    * @apiParam {string} userId - New occupant (user) mongo _id
    *
    * @apiSuccessExample {json} Success
-     HTTP/1.1 201 CREATED
+     HTTP/1.1 200 OK
      {
       "updated": true
      }
@@ -61,7 +90,7 @@ export default class ModulesActions {
     try {
       const { unitId, userId } = req.body;
       await UnitModel.findOneAndUpdate({ _id : unitId }, { $push : { occupants : userId }});
-      res.created(null, { updated : true }, 'New ocupant added');
+      res.ok(null, { updated : true }, 'New ocupant added');
     } catch (err) {
       res.badRequest(err.message, null, 'Error adding new ocupant');
     }

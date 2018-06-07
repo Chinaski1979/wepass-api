@@ -38,4 +38,33 @@ export default class ModulesActions {
       res.badRequest(err.message, null, 'Error creating new module');
     }
   }
+
+  /**
+   * @api {get} /modules/byProperty Create a module
+   * @apiName byProperty
+   * @apiGroup modules
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 201 CREATED
+     {
+       "_id": "5abc15530b0df40032fdd928",
+       "company": "66bc15530fjhg60032gfd666",
+       "parentProperty": "22bc15530fj4i40032gfd956",
+       "name": "Name of module",
+       "identifier": "1A"
+     }
+  */
+  async byProperty (req, res) {
+    try {
+      const propertyModules = await ModuleModel.find({ parentProperty : req.params.propertyId });
+      res.created(null, propertyModules, 'Retrieved property modules successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error retrieving property modules');
+    }
+  }
 }

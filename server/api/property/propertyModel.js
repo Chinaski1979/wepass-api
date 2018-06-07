@@ -9,7 +9,7 @@ const propertysSchema = new mongoose.Schema({
   country     : { type : String, default : 'CR' },
   coordinates : { type : String, lowercase : true, trim : true },
   admins      : [{type : mongoose.Schema.Types.ObjectId, ref : 'user'}],
-  company     : [{type : mongoose.Schema.Types.ObjectId, ref : 'company'}],
+  company     : {type : mongoose.Schema.Types.ObjectId, ref : 'company'},
 });
 
 export default mongoose.model('property', propertysSchema);

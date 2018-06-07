@@ -84,7 +84,7 @@ export default class PropertyActions {
    * @apiUse authorizationHeaders
    * @apiUse applicationError
    *
-   * @apiParam {String} adminId - Mongo _id
+   * @apiParam {String} adminId - Mongo user _id
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK

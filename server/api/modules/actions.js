@@ -40,7 +40,7 @@ export default class ModulesActions {
   }
 
   /**
-   * @api {get} /modules/byProperty/:propertyId Create a module
+   * @api {get} /modules/byProperty/:propertyId Get modules by property
    * @apiName byProperty
    * @apiGroup modules
    * @apiVersion 1.0.0

@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema({
   phoneNumber  : { type : String, trim : true },
   password     : String,
   role         : { type : String, required : true, enum : roleTypes },
-  company      : {type : mongoose.Schema.Types.ObjectId, ref : 'company'},
+  company      : {type : mongoose.Schema.Types.ObjectId, ref : 'company'}, // Mainly for agents and admins
+  property     : {type : mongoose.Schema.Types.ObjectId, ref : 'property'}, // Mainly for agent
   profilePic   : String,
   gender       : { type : String, enum : genderTypes },
   address      : String,

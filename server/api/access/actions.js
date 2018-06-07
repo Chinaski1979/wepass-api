@@ -1,8 +1,14 @@
+import _ from 'lodash';
+
 // Validations
 import { codeValidation } from './validations';
 
+// Services
+import { matchesParentProperties, updateAccessCode } from './services';
+
 // Models
 import AccessModel from './accessModel';
+import UserModel from '../auth/userModel';
 
 export default class AccessActions {
   /**
@@ -33,10 +39,54 @@ export default class AccessActions {
       const codeDetailsValidated = await codeValidation(req.body);
       codeDetailsValidated.createdBy = req.user.userId;
       codeDetailsValidated.accessCode = Math.floor(10000 + Math.random() * 9000);
-      const accessCode = await AccessModule.create(codeDetailsValidated);
+      const accessCode = await AccessModel.create(codeDetailsValidated);
       res.created(null, accessCode, 'Created new access code successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating new access code');
+    }
+  }
+
+  /**
+   * @api {post} /access/verify Verify access code
+   * @apiName verify
+   * @apiGroup access
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {number} accessCode - Access code
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       "_id": "fu77dj5530b0df40032fdd928",
+       "unit": {type : mongoose.Schema.Types.ObjectId, ref : 'unit'},
+       "visitor": {type : mongoose.Schema.Types.ObjectId, ref : 'user'},
+       "createdBy": {type : mongoose.Schema.Types.ObjectId, ref : 'user'},
+       "accessCode": 40583023,
+       "verified": true,
+       "verifiedBy": {type : mongoose.Schema.Types.ObjectId, ref : 'user'},
+       "verifiedAt": Date,
+     }
+  */
+  async verify (req, res) {
+    try {
+      const accessQuery = {accessCode : req.body.accessCode};
+      const accessCode = await AccessModel.findOne(accessQuery).populate('unit visitor createdBy');
+      if (_.isNull(accessCode)) throw new Error('Code doesn\'t exist');
+
+      // Verify if agent is from the same parent propery as code being verified
+      const agent = await UserModel.findOne({ _id : req.user.userId });
+      await matchesParentProperties(accessCode, agent);
+
+      // Update access code verification info and save changes
+      updateAccessCode(accessCode, agent);
+      await accessCode.save();
+
+      res.ok(null, accessCode, 'Verified access code successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error verifying access code');
     }
   }
 }

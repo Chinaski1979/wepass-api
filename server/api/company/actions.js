@@ -58,7 +58,7 @@ export default class CompanyActions {
    * @apiParam {String} companyId - Mongo _id
    *
    * @apiSuccessExample {json} Success
-     HTTP/1.1 201 CREATED
+     HTTP/1.1 200 OK
      {
         "newCompanyAdded": true
      }

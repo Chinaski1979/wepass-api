@@ -50,7 +50,7 @@ export default class ModulesActions {
    *
    *
    * @apiSuccessExample {json} Success
-     HTTP/1.1 201 CREATED
+     HTTP/1.1 201 OK
      {
        "_id": "5abc15530b0df40032fdd928",
        "company": "66bc15530fjhg60032gfd666",
@@ -62,7 +62,7 @@ export default class ModulesActions {
   async byProperty (req, res) {
     try {
       const propertyModules = await ModuleModel.find({ parentProperty : req.params.propertyId });
-      res.created(null, propertyModules, 'Retrieved property modules successfully');
+      res.ok(null, propertyModules, 'Retrieved property modules successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error retrieving property modules');
     }

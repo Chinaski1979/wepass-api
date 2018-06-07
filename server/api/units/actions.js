@@ -4,7 +4,7 @@ import { unitValidation } from './validations';
 // Models
 import UnitModel from './unitModel';
 
-export default class ModulesActions {
+export default class UnitsActions {
   /**
    * @api {post} /units/create Create a new unit
    * @apiName create

@@ -42,5 +42,6 @@ router.use('/company', require('./company').default);
 router.use('/property', require('./property').default);
 router.use('/modules', require('./modules').default);
 router.use('/units', require('./units').default);
+router.use('/access', require('./access').default);
 
 export default router;

@@ -1,6 +1,9 @@
 // Validations
 import { moduleValidation } from './validations';
 
+// Services
+import { updateModuleCount } from '../property/services';
+
 // Models
 import ModuleModel from './moduleModel';
 
@@ -33,6 +36,7 @@ export default class ModulesActions {
     try {
       const moduleValidated = await moduleValidation(req.body);
       const newModule = await ModuleModel.create(moduleValidated);
+      await updateModuleCount(moduleValidated.parentProperty);
       res.created(null, newModule, 'Created new module successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating new module');

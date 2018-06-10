@@ -11,6 +11,7 @@ export function propertyValidation (obj) {
         city        : Joi.string(),
         province    : Joi.string(),
         country     : Joi.string(),
+        image       : Joi.string(),
         coordinates : Joi.object(),
         company     : Joi.string(),
       });

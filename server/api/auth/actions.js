@@ -59,8 +59,8 @@ export default class AuthActions {
       }
       await user.comparePassword(password);
       const tokens = {
-        token   : generateToken({ userId : user._id }, TOKENS_TIME.AUTH),
-        refresh : generateToken({ userId : user._id, type : 'refresh' }, TOKENS_TIME.REFRESH),
+        token   : generateToken({ userId : user._id, role : user.role }, TOKENS_TIME.AUTH),
+        refresh : generateToken({ userId : user._id, role : user.role, type : 'refresh' }, TOKENS_TIME.REFRESH),
       };
       res.ok(null, Object.assign(tokens, { user : _.omit(user, ['password']) }), 'Log in successful.');
     } catch (err) {

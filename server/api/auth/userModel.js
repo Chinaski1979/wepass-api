@@ -8,7 +8,7 @@ const genderTypes = ['male', 'female'];
 const userSchema = new mongoose.Schema({
   firstName    : String,
   lastName     : String,
-  documentID   : { type : String, unique : true },
+  documentID   : { type : String },
   email        : { type : String, unique : true, lowercase : true, trim : true },
   vehiclePlate : { type : String, trim : true },
   phoneNumber  : { type : String, trim : true },

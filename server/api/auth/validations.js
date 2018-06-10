@@ -13,10 +13,9 @@ export function userValidation (obj) {
         phoneNumber  : Joi.string(),
         password     : Joi.string(),
         role         : Joi.string(),
-        company      : Joi.string(),
         profilePic   : Joi.string(),
         gender       : Joi.string(),
-        trial        : Joi.string(),
+        trial        : Joi.boolean(),
       });
       const result = await executeValidation(obj, schema);
       resolve(result);

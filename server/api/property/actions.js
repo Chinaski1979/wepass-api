@@ -40,10 +40,11 @@ export default class PropertyActions {
   async create (req, res) {
     try {
       const propertyValidated = await propertyValidation(req.body);
-      const newCompany = await PropertyModel.create(propertyValidated);
-      res.created(null, newCompany, 'Created new company successfully');
+      const newProperty = await PropertyModel.create(propertyValidated);
+      if (req.user.role === 'admin') newProperty.admins.push(req.user.userId);
+      res.created(null, newProperty, 'Created new property successfully');
     } catch (err) {
-      res.badRequest(err.message, null, 'Error creating new company');
+      res.badRequest(err.message, null, 'Error creating new property');
     }
   }
 

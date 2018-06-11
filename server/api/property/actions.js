@@ -22,6 +22,10 @@ export default class PropertyActions {
    * @apiParam {String} country
    * @apiParam {Object} coordinates - {lat: "9.9439182", long: "-84.0431748"}
    * @apiParam {String} company - Mongo _id
+   * @apiParam {String} moduleLabel
+   * @apiParam {String} unitLabel
+
+
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 201 CREATED

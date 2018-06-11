@@ -14,6 +14,8 @@ export function propertyValidation (obj) {
         image       : Joi.string(),
         coordinates : Joi.object(),
         company     : Joi.string(),
+        moduleLabel : Joi.string(),
+        unitLabel   : Joi.string(),
       });
       const result = await executeValidation(obj, schema);
       resolve(result);

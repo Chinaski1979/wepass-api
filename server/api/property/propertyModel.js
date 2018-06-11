@@ -10,6 +10,8 @@ const propertysSchema = new mongoose.Schema({
   coordinates : { type : String, lowercase : true, trim : true },
   image       : String,
   moduleCount : { type : Number, default : 0 },
+  moduleLabel : String,
+  unitLabel   : String,
   admins      : [{type : mongoose.Schema.Types.ObjectId, ref : 'user'}],
   company     : {type : mongoose.Schema.Types.ObjectId, ref : 'company'},
 });

@@ -7,6 +7,7 @@ export function updateModuleCount (propertyId) {
     try {
       const modulesInProperty = ModuleModel.find({ parentProperty : propertyId }).lean();
       await PropertyModel.update({ _id : propertyId }, { $set : { moduleCount : modulesInProperty.length } });
+      resolve();
     } catch (err) {
       reject(err);
     }

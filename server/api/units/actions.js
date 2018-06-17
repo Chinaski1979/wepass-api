@@ -61,7 +61,7 @@ export default class UnitsActions {
   */
   async byParentModule (req, res) {
     try {
-      const moduleUnits = await UnitModel.find({ parentModule : req.params.moduleId });
+      const moduleUnits = await UnitModel.find({ parentModule : req.params.moduleId }).populate('occupants');
       res.ok(null, moduleUnits, 'Successfully retrieved module units');
     } catch (err) {
       res.badRequest(err.message, null, 'Error retrieving module units');

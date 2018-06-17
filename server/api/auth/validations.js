@@ -4,6 +4,7 @@ import { executeValidation } from 'helpers/joiValidate';
 export function userValidation (obj) {
   return new Promise(async (resolve, reject) => {
     try {
+      obj.company = obj.company.toString();
       const schema = Joi.object().keys({
         firstName    : Joi.string(),
         lastName     : Joi.string(),
@@ -16,6 +17,7 @@ export function userValidation (obj) {
         profilePic   : Joi.string(),
         gender       : Joi.string(),
         trial        : Joi.boolean(),
+        company      : Joi.string(),
       });
       const result = await executeValidation(obj, schema);
       resolve(result);

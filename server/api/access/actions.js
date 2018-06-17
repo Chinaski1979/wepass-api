@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { codeValidation } from './validations';
 
 // Services
-import { matchesParentProperties, updateAccessCode } from './services';
+import { updateAccessCode } from './services'; // matchesParentProperties
 
 // Models
 import AccessModel from './accessModel';
@@ -78,7 +78,7 @@ export default class AccessActions {
 
       // Verify if agent is from the same parent propery as code being verified
       const agent = await UserModel.findOne({ _id : req.user.userId });
-      await matchesParentProperties(accessCode, agent);
+      // await matchesParentProperties(accessCode, agent);
 
       // Update access code verification info and save changes
       updateAccessCode(accessCode, agent);
@@ -89,4 +89,46 @@ export default class AccessActions {
       res.badRequest(err.message, null, 'Error verifying access code');
     }
   }
+
+  /**
+   * @api {get} /access/history Get access code history
+   * @apiName history
+   * @apiGroup access
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {string} parentProperty - Mongo _id of parent property
+   * @apiParam {string} fromDate - Date for query in format mm/dd/yyyy | I think front should sent date in UTC
+   * @apiParam {string} toDate
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     [{
+       "_id": "fu77dj5530b0df40032fdd928",
+       "unit": {type : mongoose.Schema.Types.ObjectId, ref : 'unit'},
+       "visitor": {type : mongoose.Schema.Types.ObjectId, ref : 'user'},
+       "createdBy": {type : mongoose.Schema.Types.ObjectId, ref : 'user'},
+       "accessCode": 40583023,
+       "verified": true,
+       "verifiedBy": {type : mongoose.Schema.Types.ObjectId, ref : 'user'},
+       "verifiedAt": Date,
+     }]
+  */
+  // async history (req, res) {
+  //   try {
+  //     const { parentProperty, fromDate, toDate } = req.body;
+  //     const startDate = new Date(date);  // Beggining of day.
+  //     startDate.setHours(0);
+  //     startDate.setMinutes(0);
+  //     startDate.setSeconds(0);
+  //     const query = { verifiedAt : {'$gte' : startDate, '$lt' : endDate}, 'unit.parentProperty': parentProperty };
+  //     const accessCodes = await AccessModel.find(query);
+  //
+  //     res.ok(null, accessCodes, 'Retrieved access codes successfully');
+  //   } catch (err) {
+  //     res.badRequest(err.message, null, 'Error retrieving access codes');
+  //   }
+  // }
 }

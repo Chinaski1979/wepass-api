@@ -13,3 +13,7 @@ export function updateAccessCode (accessCode, agent) {
   accessCode.verifiedAt = new Date();
   accessCode.verifiedBy = agent._id;
 }
+
+// export function setUpQuery () {
+//
+// }

@@ -182,7 +182,7 @@ export default class AuthActions {
   async createAccount (req, res) {
     try {
       const userValidated = await userValidation(req.body);
-      const newAccount = createUser(userValidated);
+      const newAccount = await createUser(userValidated);
       res.created(null, newAccount, 'Created account successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating account');

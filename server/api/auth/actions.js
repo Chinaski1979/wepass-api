@@ -154,14 +154,16 @@ export default class AuthActions {
    * @apiParam {String} firstName
    * @apiParam {String} lastName
    * @apiParam {String} email
+   * @apiParam {String} documentID
    * @apiParam {String} password
    * @apiParam {String} vehiclePlate
    * @apiParam {String} phoneNumber
    * @apiParam {String} email
    * @apiParam {String} role
    * @apiParam {String} gender
+   * @apiParam {String} profilePic
    * @apiParam {String} company - Mongo _id of the company
-   *
+   * @apiParam {String} property - Mongo _id of the company
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 201 CREATED
@@ -169,13 +171,16 @@ export default class AuthActions {
        "_id": "5abc15530b0df40032fdd928",
        "firstName": "Jack",
        "lastName": "White",
+       "documentID": "112333442"
+       "email": "white@gmail.com",
        "vehiclePlate": "AAA-111",
        "phoneNumber": "24329086",
-       "email": "white@gmail.com",
        "role": "Admin",
+       "profilePic": "ImageURLstring",
        "gender": "Male",
        "company": "5abc15530b0df40032fdd928",
-       "trial": false
+       "trial": false,
+       "property": "914nk2h45209gr0g33ffdfs"
      }
   */
 

@@ -1,5 +1,5 @@
 // Validations
-import { eventValidation } from './validations';
+import { eventValidation, updateEventValidation } from './validations';
 
 // Models
 import EventModel from './eventModel';
@@ -15,7 +15,17 @@ export default class EventActions {
     }
   }
 
-  async adminEvents (req, res) {
+  async update (req, res) {
+    try {
+      const eventValidated = await updateEventValidation(req.body);
+      const updatedEvent = await EventModel.findOneAndUpdate({ _id : eventValidated.eventId}, eventValidated);
+      res.created(null, updatedEvent, `The Event ${updatedEvent._id} was update successfully`);
+    } catch (err) {
+      res.badRequest(err.message, null, `Error updating ${req.body._id}`);
+    }
+  }
+
+  async adminEvent (req, res) {
     try {
       const { adminId } = req.body;
       const events = await EventModel.find({ owner : adminId })

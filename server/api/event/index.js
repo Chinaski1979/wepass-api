@@ -7,7 +7,9 @@ const actions = new Actions();
 // POST Methods
 router.post('/create', actions.create);
 
-// GET Methods
-router.post('/adminEvents', actions.adminEvents);
+router.post('/update', actions.update);
+
+router.post('/adminEvents', actions.adminEvent);
+
 
 export default router;

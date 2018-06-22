@@ -1,5 +1,5 @@
 // Validations
-import { eventValidation, updateEventValidation } from './validations';
+import { eventValidation, updateEventValidation, deleteEventValidation } from './validations';
 
 // Models
 import EventModel from './eventModel';
@@ -19,9 +19,19 @@ export default class EventActions {
     try {
       const eventValidated = await updateEventValidation(req.body);
       const updatedEvent = await EventModel.findOneAndUpdate({ _id : eventValidated.eventId}, eventValidated);
-      res.created(null, updatedEvent, `The Event ${updatedEvent._id} was update successfully`);
+      res.ok(null, updatedEvent, `The Event ${updatedEvent._id} was successfully updated`);
     } catch (err) {
-      res.badRequest(err.message, null, `Error updating ${req.body._id}`);
+      res.badRequest(err.message, null, `Error updating ${req.body.eventId}`);
+    }
+  }
+
+  async delete (req, res) {
+    try {
+      const eventValidated = await deleteEventValidation(req.body);
+      const deletedEvent = await EventModel.findOneAndRemove({ _id : eventValidated.eventId});
+      res.ok(null, deletedEvent, `The Event ${deletedEvent._id} was successfully deleted`);
+    } catch (err) {
+      res.badRequest(err.message, null, `Error updating ${req.body.eventId}`);
     }
   }
 

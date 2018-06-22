@@ -38,3 +38,17 @@ export function updateEventValidation (obj) {
     }
   });
 }
+
+export function deleteEventValidation (obj) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const schema = Joi.object().keys({
+        eventId : Joi.string().required(),
+      });
+      const result = await executeValidation(obj, schema);
+      resolve(result);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}

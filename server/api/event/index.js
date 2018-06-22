@@ -9,6 +9,8 @@ router.post('/create', actions.create);
 
 router.post('/update', actions.update);
 
+router.post('/delete', actions.delete);
+
 router.post('/adminEvents', actions.adminEvent);
 
 

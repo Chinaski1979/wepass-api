@@ -18,7 +18,13 @@ export default class EventActions {
   async adminEvents (req, res) {
     try {
       const { adminId } = req.body;
-      const events = await EventModel.find({ owner : adminId });
+      const events = await EventModel.find({ owner : adminId })
+        .populate('owner', 'firstName')
+        .populate('user', 'name')
+        .populate('property', 'name')
+        .populate('module', 'name')
+        .populate('unit', 'identifier');
+
       res.ok(null, events, 'Admin events retrieved successfully!');
     } catch (err) {
       res.badRequest(err.message, null, 'Error retrieving admin events.');

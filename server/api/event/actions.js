@@ -20,7 +20,7 @@ export default class EventActions {
       const { adminId } = req.body;
       const events = await EventModel.find({ owner : adminId })
         .populate('owner', 'firstName')
-        .populate('user', 'name')
+        .populate('user', 'firstName')
         .populate('property', 'name')
         .populate('module', 'name')
         .populate('unit', 'identifier');

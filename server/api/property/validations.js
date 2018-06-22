@@ -12,7 +12,10 @@ export function propertyValidation (obj) {
         province    : Joi.string(),
         country     : Joi.string(),
         image       : Joi.string(),
-        coordinates : Joi.object(),
+        coordinates : Joi.object({
+          lat  : Joi.string(),
+          long : Joi.string(),
+        }),
         company     : Joi.string(),
         moduleLabel : Joi.string(),
         unitLabel   : Joi.string(),

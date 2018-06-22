@@ -7,7 +7,10 @@ const propertysSchema = new mongoose.Schema({
   city        : String,
   province    : String,
   country     : { type : String, default : 'CR' },
-  coordinates : { type : String, lowercase : true, trim : true },
+  coordinates : {
+    lat  : { type : String },
+    long : { type : String },
+  },
   image       : String,
   moduleCount : { type : Number, default : 0 },
   moduleLabel : String,

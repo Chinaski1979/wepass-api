@@ -8,7 +8,7 @@ require('babel-register')({
   presets : [ 'env' ],
 });
 
-require('dotenv').config({path: path.join(__dirname, '../.env')});
+require('dotenv').config({path : path.join(__dirname, '../.env')});
 
 // Import the rest of our application.
 module.exports = require('./server.js');

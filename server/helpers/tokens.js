@@ -10,9 +10,10 @@ export function generateToken (payload, time) {
   });
 }
 
-export function verifyToken (token, ignoreTime) {
+export function verifyToken (token, path) {
   return new Promise((resolve, reject) => {
-    JWT.verify(token, tokenSecret, { ignoreExpiration : ignoreTime }, (err, decoded) => {
+    const ignoreExpiration = path === '/auth/refreshToken';
+    JWT.verify(token, tokenSecret, { ignoreExpiration }, (err, decoded) => {
       if (err) {
         reject(err);
       } else {
@@ -40,10 +41,11 @@ function getParts (authorization) {
 
 export async function authMidleware (req, res, next) {
   try {
+    console.log(req.path);
     const parts = req.headers.authorization ? getParts(req.headers.authorization) : null;
     const hasBearer = _.has(parts, 'scheme') ? /^Bearer$/i.test(parts.scheme) : null;
     if (!_.isNull(parts) && hasBearer) {
-      const { content } = await verifyToken(parts.token);
+      const { content } = await verifyToken(parts.token, req.path);
       _.set(req, 'user', content);
       next();
     } else if (isPublicRoute(PUBLIC_ROUTES, req.path)) {

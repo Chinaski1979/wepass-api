@@ -17,6 +17,7 @@ export function userValidation (obj) {
         profilePic   : Joi.string(),
         gender       : Joi.string(),
         trial        : Joi.boolean(),
+        property     : Joi.string(),
         company      : Joi.string(),
       });
       const result = await executeValidation(obj, schema);

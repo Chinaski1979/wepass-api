@@ -8,4 +8,5 @@ module.exports = {
     '/auth/createAccount',
     '/auth/trialRegistration',
   ],
+  eventsWhiteList : ['pending', 'started', 'finished', 'canceled'],
 };

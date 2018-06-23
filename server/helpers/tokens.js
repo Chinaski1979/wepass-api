@@ -41,7 +41,6 @@ function getParts (authorization) {
 
 export async function authMidleware (req, res, next) {
   try {
-    console.log(req.path);
     const parts = req.headers.authorization ? getParts(req.headers.authorization) : null;
     const hasBearer = _.has(parts, 'scheme') ? /^Bearer$/i.test(parts.scheme) : null;
     if (!_.isNull(parts) && hasBearer) {

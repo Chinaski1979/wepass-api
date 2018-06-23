@@ -1,3 +1,6 @@
+// Services
+import { updateUnitCount } from '../property/services';
+
 // Validations
 import { unitValidation } from './validations';
 
@@ -33,6 +36,7 @@ export default class UnitsActions {
     try {
       const unitValidated = await unitValidation(req.body);
       const newUnit = await UnitModel.create(unitValidated);
+      await updateUnitCount(unitValidated.parentProperty);
       res.created(null, newUnit, 'Created new unit successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating new unit');

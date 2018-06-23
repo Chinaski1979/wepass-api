@@ -14,6 +14,7 @@ const propertysSchema = new mongoose.Schema({
   image       : String,
   moduleCount : { type : Number, default : 0 },
   moduleLabel : String,
+  unitCount   : { type : Number, default : 0 },
   unitLabel   : String,
   admins      : [{type : mongoose.Schema.Types.ObjectId, ref : 'user'}],
   company     : {type : mongoose.Schema.Types.ObjectId, ref : 'company'},

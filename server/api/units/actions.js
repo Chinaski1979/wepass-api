@@ -44,6 +44,41 @@ export default class UnitsActions {
   }
 
   /**
+   * @api {put} /units/update/:unitId Update a new unit
+   * @apiName update
+   * @apiGroup units
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {string} company - Company who owns the unit  mongo _id. Avoid updating this value
+   * @apiParam {string} parentProperty - Parent property mongo _id. Avoid updating this value
+   * @apiParam {string} parentModule - Parent module mongo _id. Avoid updating this value
+   * @apiParam {string} identifier - Code or some sort of unique identifier
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 201 CREATED
+     {
+       "_id": "5abc15530b0df40032fdd928",
+       "company": "66bc15530fjhg60032gfd666",
+       "parentProperty": "22bc15530fj4i40032gfd956",
+       "parentModule": "aa1c1553zzd4i40032gfd767",
+       "identifier": "1"
+     }
+  */
+  async update (req, res) {
+    try {
+      const newUnitDetailsValidated = await unitValidation(req.body);
+      const query = {_id : req.params.unitId};
+      const updatedUnit = await UnitModel.findOneAndUpdate(query, newUnitDetailsValidated, { new: true });
+      res.ok(null, updatedUnit, 'Unit updated successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error updating unit');
+    }
+  }
+
+  /**
    * @api {get} /units/byParentModule/:moduleId Get property modules
    * @apiName byParentModule
    * @apiGroup units

@@ -71,7 +71,7 @@ export default class UnitsActions {
     try {
       const newUnitDetailsValidated = await unitValidation(req.body);
       const query = {_id : req.params.unitId};
-      const updatedUnit = await UnitModel.findOneAndUpdate(query, newUnitDetailsValidated, { new: true });
+      const updatedUnit = await UnitModel.findOneAndUpdate(query, newUnitDetailsValidated, { new : true });
       res.ok(null, updatedUnit, 'Unit updated successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error updating unit');

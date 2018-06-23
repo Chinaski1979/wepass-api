@@ -96,7 +96,7 @@ export default class PropertyActions {
     try {
       const newPropertyDetailsValidated = await propertyValidation(req.body);
       const query = {_id : req.params.propertyId};
-      const updatedProperty = await PropertyModel.findOneAndUpdate(query, newPropertyDetailsValidated, { new: true });
+      const updatedProperty = await PropertyModel.findOneAndUpdate(query, newPropertyDetailsValidated, { new : true });
       res.ok(null, updatedProperty, 'Property updated successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error updating property');

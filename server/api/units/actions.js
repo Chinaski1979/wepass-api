@@ -58,7 +58,7 @@ export default class UnitsActions {
    * @apiParam {string} identifier - Code or some sort of unique identifier
    *
    * @apiSuccessExample {json} Success
-     HTTP/1.1 201 CREATED
+     HTTP/1.1 200 OK
      {
        "_id": "5abc15530b0df40032fdd928",
        "company": "66bc15530fjhg60032gfd666",

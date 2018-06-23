@@ -21,11 +21,10 @@ export default class PropertyActions {
    * @apiParam {String} province
    * @apiParam {String} country
    * @apiParam {Object} coordinates - {lat: "9.9439182", long: "-84.0431748"}
-   * @apiParam {String} company - Mongo _id
+   * @apiParam {String} image
    * @apiParam {String} moduleLabel
    * @apiParam {String} unitLabel
-
-
+   * @apiParam {String} company - Mongo _id
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 201 CREATED
@@ -49,6 +48,58 @@ export default class PropertyActions {
       res.created(null, newProperty, 'Created new property successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating new property');
+    }
+  }
+
+  /**
+   * @api {put} /property/update/:propertyId Update a property
+   * @apiName create
+   * @apiGroup property
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {String} name
+   * @apiParam {String} label
+   * @apiParam {String} address
+   * @apiParam {String} city
+   * @apiParam {String} province
+   * @apiParam {String} country
+   * @apiParam {Object} coordinates - {lat: "9.9439182", long: "-84.0431748"}
+   * @apiParam {String} image
+   * @apiParam {String} moduleLabel
+   * @apiParam {String} unitLabel
+   * @apiParam {String} company - Mongo _id. Avoid updating this value.
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       "_id"         : "5abc15530b0df40032fdd928",
+       "name"        : "Residencial X",
+       "label"       : "Some string",
+       "address"     : "Sabanilla, San Pedro, San José",
+       "city"        : "San Pedro"
+       "province"    : "San José",
+       "country"     : "CR",
+       "coordinates" : {"lat": "9.9439182", "long": "-84.0431748"},
+       "image"       : "ImageURLString",
+       "moduleCount" : 7,
+       "moduleLabel" : "Torre",
+       "unitCount"   : 67,
+       "unitLabel"   : "Apartamento",
+       "admins"      : ["5abcgy570b0df40032fd9fie"],
+       "company"     : "5add15530b0df40032fd3hfld"
+     }
+  */
+  async update (req, res) {
+    try {
+      const newPropertyDetailsValidated = await propertyValidation(req.body);
+      const query = {_id : req.params.propertyId};
+      const updatedProperty = await PropertyModel.findOneAndUpdate(query, newPropertyDetailsValidated, { new: true });
+      res.ok(null, updatedProperty, 'Property updated successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error updating property');
     }
   }
 

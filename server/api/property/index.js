@@ -8,6 +8,9 @@ const actions = new Actions();
 router.post('/create', actions.create);
 router.post('/addAdmin', actions.addAdmin);
 
+// PUT Methods
+router.put('/update/:propertyId', actions.update);
+
 // GET Methods
 router.post('/adminProperties', actions.adminProperties);
 

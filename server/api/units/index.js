@@ -8,6 +8,9 @@ const actions = new Actions();
 router.post('/create', actions.create);
 router.post('/addOcupant', actions.addOcupant);
 
+// PUT Methods
+router.put('/update/:unitId', actions.update);
+
 // GET Methods
 router.get('/byParentModule/:moduleId', actions.byParentModule);
 

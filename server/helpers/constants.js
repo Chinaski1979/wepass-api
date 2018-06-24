@@ -5,8 +5,10 @@ module.exports = {
   },
   PUBLIC_ROUTES : [
     '/auth/login',
-    '/auth/createAccount',
     '/auth/trialRegistration',
+  ],
+  ADMIN_ROUTES : [
+    '/auth/createAccount',
   ],
   eventsWhiteList : ['pending', 'started', 'finished', 'canceled'],
 };

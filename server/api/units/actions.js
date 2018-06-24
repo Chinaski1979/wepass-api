@@ -44,7 +44,7 @@ export default class UnitsActions {
   }
 
   /**
-   * @api {put} /units/update/:unitId Update a new unit
+   * @api {put} /units/update/:unitId Update a unit
    * @apiName update
    * @apiGroup units
    * @apiVersion 1.0.0
@@ -58,7 +58,7 @@ export default class UnitsActions {
    * @apiParam {string} identifier - Code or some sort of unique identifier
    *
    * @apiSuccessExample {json} Success
-     HTTP/1.1 201 CREATED
+     HTTP/1.1 200 OK
      {
        "_id": "5abc15530b0df40032fdd928",
        "company": "66bc15530fjhg60032gfd666",
@@ -71,7 +71,7 @@ export default class UnitsActions {
     try {
       const newUnitDetailsValidated = await unitValidation(req.body);
       const query = {_id : req.params.unitId};
-      const updatedUnit = await UnitModel.findOneAndUpdate(query, newUnitDetailsValidated, { new: true });
+      const updatedUnit = await UnitModel.findOneAndUpdate(query, newUnitDetailsValidated, { new : true });
       res.ok(null, updatedUnit, 'Unit updated successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error updating unit');

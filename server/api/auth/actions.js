@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Services
-import { createUser } from './services';
+import { createUser, sendFirstTimePasscode } from './services';
 import { createNewCompany } from '../company/services';
 
 // Helpers
@@ -137,6 +137,8 @@ export default class AuthActions {
       const newCompany = await createNewCompany({ name : companyName });
       const userDetails = { firstName, lastName, email, password, role : 'admin', trial : true, company : newCompany._id };
       const newUser = await createUser(userDetails);
+      // Send notification email
+
       res.created(null, newUser, 'Created trial account successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating trial account');
@@ -188,6 +190,10 @@ export default class AuthActions {
     try {
       const userValidated = await userValidation(req.body);
       const newAccount = await createUser(userValidated);
+      // Send email with first time passcode if account role is 'user'
+      if (newAccount.role === 'user') {
+        await sendFirstTimePasscode('marvin@wepass.io'); // newAccount.email 'cascante.george@gmail.com'
+      }
       res.created(null, newAccount, 'Created account successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating account');

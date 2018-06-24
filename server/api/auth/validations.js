@@ -4,7 +4,7 @@ import { executeValidation } from 'helpers/joiValidate';
 export function userValidation (obj) {
   return new Promise(async (resolve, reject) => {
     try {
-      obj.company = obj.company.toString();
+      if (obj.company) obj.company.toString();
       const schema = Joi.object().keys({
         firstName    : Joi.string(),
         lastName     : Joi.string(),

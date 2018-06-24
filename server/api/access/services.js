@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export function matchesParentProperties (accessCode, agent) {
   return new Promise((resolve, reject) => {
     if (accessCode.unit.parentProperty !== agent.property) {
@@ -10,10 +12,6 @@ export function matchesParentProperties (accessCode, agent) {
 
 export function updateAccessCode (accessCode, agent) {
   accessCode.verified = true;
-  accessCode.verifiedAt = new Date();
   accessCode.verifiedBy = agent._id;
+  accessCode.verifiedAt = moment().utc().subtract(6, 'hours');
 }
-
-// export function setUpQuery () {
-//
-// }

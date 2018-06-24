@@ -44,7 +44,7 @@ export default class UnitsActions {
   }
 
   /**
-   * @api {put} /units/update/:unitId Update a new unit
+   * @api {put} /units/update/:unitId Update a unit
    * @apiName update
    * @apiGroup units
    * @apiVersion 1.0.0

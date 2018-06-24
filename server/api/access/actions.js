@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 
 // Validations
 import { codeValidation } from './validations';
@@ -39,6 +40,7 @@ export default class AccessActions {
       const codeDetailsValidated = await codeValidation(req.body);
       codeDetailsValidated.createdBy = req.user.userId;
       codeDetailsValidated.accessCode = Math.floor(10000 + Math.random() * 9000);
+      codeDetailsValidated.createdAt = moment().utc().subtract(6, 'hours');
       const accessCode = await AccessModel.create(codeDetailsValidated);
       res.created(null, accessCode, 'Created new access code successfully');
     } catch (err) {

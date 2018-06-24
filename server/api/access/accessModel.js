@@ -8,6 +8,6 @@ const accessSchema = new mongoose.Schema({
   verified   : { type : Boolean, default : false },
   verifiedBy : {type : mongoose.Schema.Types.ObjectId, ref : 'user'},
   verifiedAt : Date,
-  createdAt  : { type : Date, default : Date.now },
+  createdAt  : Date,
 });
 export default mongoose.model('access', accessSchema);

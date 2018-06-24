@@ -4,14 +4,12 @@ import Actions from './actions';
 const router = new Router();
 const actions = new Actions();
 
-// POST Methods
-router.post('/create', actions.create);
+router.post('/', actions.create);
 
-router.post('/update', actions.update);
+router.put('/:eventId', actions.update);
 
-router.post('/delete', actions.delete);
+router.delete('/:eventId', actions.delete);
 
-router.post('/adminEvents', actions.adminEvent);
-
+router.get('/:adminId', actions.adminEvent);
 
 export default router;

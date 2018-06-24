@@ -17,7 +17,7 @@ export default class EventActions {
 
   async update (req, res) {
     try {
-      const eventValidated = await updateEventValidation(req.body);
+      const eventValidated = await updateEventValidation(Object.assign(req.body, { eventId : req.params.propertyId }));
       const updatedEvent = await EventModel.findOneAndUpdate({ _id : eventValidated.eventId}, eventValidated);
       res.ok(null, updatedEvent, `The Event ${updatedEvent._id} was successfully updated`);
     } catch (err) {
@@ -27,7 +27,7 @@ export default class EventActions {
 
   async delete (req, res) {
     try {
-      const eventValidated = await deleteEventValidation(req.body);
+      const eventValidated = await deleteEventValidation({ eventId : req.params.propertyId});
       const deletedEvent = await EventModel.findOneAndRemove({ _id : eventValidated.eventId});
       res.ok(null, deletedEvent, `The Event ${deletedEvent._id} was successfully deleted`);
     } catch (err) {
@@ -37,8 +37,7 @@ export default class EventActions {
 
   async adminEvent (req, res) {
     try {
-      const { adminId } = req.body;
-      const events = await EventModel.find({ owner : adminId })
+      const events = await EventModel.find({ owner : req.params.adminId })
         .populate('owner', 'firstName')
         .populate('user', 'firstName')
         .populate('property', 'name')

@@ -8,7 +8,7 @@ const baseEmail = Joi.object().keys({
   subject : Joi.string().required(),
 });
 
-export function emailData (type, data) {
+export function emailData (data) {
   return new Promise(async (resolve, reject) => {
     try {
       const result = await executeValidation(data, baseEmail);

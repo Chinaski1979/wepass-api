@@ -5,7 +5,6 @@ const mailgun = new Mailgun({ apiKey : process.env.MG_API_KEY, domain : process.
 export default function buildEmailTemplate (data) {
   return new Promise(async (resolve, reject) => {
     try {
-      // Validate if the data meet the required fields in order to correctly populate the template
       const html = await emailData(data);
       const emailConfig = Object.assign(data, { html : html.template });
       const email = await mailgun.messages().send(emailConfig);

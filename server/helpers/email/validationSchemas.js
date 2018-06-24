@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { executeValidation } from 'helpers/joiValidate';
-import { genericTemplate } from './templates';
+import genericTemplate from './htmlContent';
 
 const baseEmail = Joi.object().keys({
   from    : Joi.string().required(),

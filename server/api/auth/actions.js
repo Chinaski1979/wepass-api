@@ -231,6 +231,7 @@ export default class AuthActions {
     try {
       const passCodeDoc = await FirstTimePasscodeModel.findOneAndRemove({passcode : req.body.passcode}).populate('user');
       if (_.isNull(passCodeDoc)) throw Error('Passcode doesn\'t exist');
+      await UserModel.update({ _id : passCodeDoc.user._id}, { $set: { firstTimeAccessed : true } });
       res.ok(null, passCodeDoc.user, 'Fist time passcode verified successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error verifying first time passcode');

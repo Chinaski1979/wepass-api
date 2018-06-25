@@ -13,6 +13,7 @@ import { userValidation } from './validations';
 
 // Models
 import UserModel from './userModel';
+import FirstTimePasscodeModel from './firstTimePasscodeModel';
 
 export default class AuthActions {
   /**
@@ -195,6 +196,16 @@ export default class AuthActions {
       res.created(null, newAccount, 'Created account successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating account');
+    }
+  }
+
+  async firstTimeAccess (req, res) {
+    try {
+      const passCodeDoc = await FirstTimePasscodeModel.findOneAndRemove({passcode : req.body.passcode}).populate('user');
+      if (_.isNull(passCodeDoc)) throw Error('Passcode doesn\'t exist');
+      res.ok(null, passCodeDoc.user, 'Fist time passcode verified successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error verifying first time passcode');
     }
   }
 }

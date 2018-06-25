@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const firstTimePasscodeSchema = new mongoose.Schema({
   passcode  : Number,
-  user      : { type : mongoose.Schema.Types.ObjectId, ref : 'user' },
+  user      : { type : mongoose.Schema.Types.ObjectId, ref : 'user', unique : true },
   createdAt : { type : Date, default : new Date() },
 });
 

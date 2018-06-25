@@ -7,8 +7,8 @@ const actions = new Actions();
 // POST Methods
 router.post('/create', actions.create);
 router.post('/verify', actions.verify);
+router.post('/history', actions.history);
 
 // GET Methods
-// router.get('/history', actions.history);
 
 export default router;

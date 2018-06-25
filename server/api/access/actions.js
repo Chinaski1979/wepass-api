@@ -5,11 +5,12 @@ import moment from 'moment';
 import { codeValidation } from './validations';
 
 // Services
-import { updateAccessCode } from './services'; // matchesParentProperties
+import { updateAccessCode, setUpAccessHistoryQuery } from './services'; // matchesParentProperties
 
 // Models
 import AccessModel from './accessModel';
 import UserModel from '../auth/userModel';
+import UnitModel from '../units/unitModel';
 
 export default class AccessActions {
   /**
@@ -41,6 +42,10 @@ export default class AccessActions {
       codeDetailsValidated.createdBy = req.user.userId;
       codeDetailsValidated.accessCode = Math.floor(10000 + Math.random() * 9000);
       codeDetailsValidated.createdAt = moment().utc().subtract(6, 'hours');
+      console.log(codeDetailsValidated.unit);
+      const unit = await UnitModel.findOne({ _id : codeDetailsValidated.unit }).select('parentProperty');
+      console.log(unit);
+      codeDetailsValidated.parentProperty = unit.parentProperty;
       const accessCode = await AccessModel.create(codeDetailsValidated);
       res.created(null, accessCode, 'Created new access code successfully');
     } catch (err) {
@@ -76,7 +81,7 @@ export default class AccessActions {
     try {
       const accessQuery = {accessCode : req.body.accessCode};
       const accessCode = await AccessModel.findOne(accessQuery).populate('unit visitor createdBy');
-      if (_.isNull(accessCode)) throw new Error('Code doesn\'t exist');
+      if (_.isNull(accessCode)) throw Error('Code doesn\'t exist');
 
       // Verify if agent is from the same parent propery as code being verified
       const agent = await UserModel.findOne({ _id : req.user.userId });
@@ -102,8 +107,8 @@ export default class AccessActions {
    * @apiUse applicationError
    *
    * @apiParam {string} parentProperty - Mongo _id of parent property
-   * @apiParam {string} fromDate - Date for query in format mm/dd/yyyy | I think front should sent date in UTC
-   * @apiParam {string} toDate
+   * @apiParam {string} fromDate - Date for query in format YYYY-MM-DD
+   * @apiParam {string} toDate - YYYY-MM-DD
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK
@@ -118,19 +123,14 @@ export default class AccessActions {
        "verifiedAt": Date,
      }]
   */
-  // async history (req, res) {
-  //   try {
-  //     const { parentProperty, fromDate, toDate } = req.body;
-  //     const startDate = new Date(date);  // Beggining of day.
-  //     startDate.setHours(0);
-  //     startDate.setMinutes(0);
-  //     startDate.setSeconds(0);
-  //     const query = { verifiedAt : {'$gte' : startDate, '$lt' : endDate}, 'unit.parentProperty': parentProperty };
-  //     const accessCodes = await AccessModel.find(query);
-  //
-  //     res.ok(null, accessCodes, 'Retrieved access codes successfully');
-  //   } catch (err) {
-  //     res.badRequest(err.message, null, 'Error retrieving access codes');
-  //   }
-  // }
+  async history (req, res) {
+    try {
+      const { parentProperty, fromDate, toDate } = req.body;
+      const query = setUpAccessHistoryQuery(parentProperty, fromDate, toDate);
+      const accessCodes = await AccessModel.find(query).populate('unit visitor createdBy verifiedBy').select('-verified');
+      res.ok(null, accessCodes, 'Retrieved access codes successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error retrieving access codes');
+    }
+  }
 }

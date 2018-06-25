@@ -13,6 +13,7 @@ import { userValidation } from './validations';
 
 // Models
 import UserModel from './userModel';
+import FirstTimePasscodeModel from './firstTimePasscodeModel';
 
 export default class AuthActions {
   /**
@@ -195,6 +196,44 @@ export default class AuthActions {
       res.created(null, newAccount, 'Created account successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating account');
+    }
+  }
+
+  /**
+   * @api {post} /auth/firstTimeAccess First time access
+   * @apiName firstTimeAccess
+   * @apiGroup auth
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {String} passcode
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       "_id"          : "5abc15530b0df40032fdd928",
+       "firstName"    : "David",
+       "lastName"     : "Bowie",
+       "documentID"   : "112880431",
+       "email"        : "bowie@gmail.com",
+       "vehiclePlate" : "FCK-666",
+       "phoneNumber"  : "70759009",
+       "role"         : "Admin",
+       "company"      : "5aebea94092fc5000d9c047a",
+       "unit"         : "566bxa94065fcwe10d2c90fh",
+       "profilePic"   : "String",
+       "gender"       : "Male",
+     }
+   */
+  async firstTimeAccess (req, res) {
+    try {
+      const passCodeDoc = await FirstTimePasscodeModel.findOneAndRemove({passcode : req.body.passcode}).populate('user');
+      if (_.isNull(passCodeDoc)) throw Error('Passcode doesn\'t exist');
+      res.ok(null, passCodeDoc.user, 'Fist time passcode verified successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error verifying first time passcode');
     }
   }
 }

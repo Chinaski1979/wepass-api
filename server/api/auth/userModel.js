@@ -6,21 +6,22 @@ const roleTypes = ['user', 'guest', 'agent', 'admin', 'superAdmin'];
 const genderTypes = ['male', 'female'];
 
 const userSchema = new mongoose.Schema({
-  firstName    : String,
-  lastName     : String,
-  documentID   : { type : String },
-  email        : { type : String, unique : true, lowercase : true, trim : true },
-  vehiclePlate : { type : String, trim : true },
-  phoneNumber  : { type : String, trim : true },
-  password     : String,
-  role         : { type : String, required : true, enum : roleTypes },
-  company      : {type : mongoose.Schema.Types.ObjectId, ref : 'company'}, // Mainly for agents and admins
-  property     : {type : mongoose.Schema.Types.ObjectId, ref : 'property'}, // Mainly for agent
-  profilePic   : String,
-  gender       : { type : String, enum : genderTypes },
-  address      : String,
-  trial        : Boolean,
-  createdAt    : { type : Date, default : Date.now },
+  firstName         : String,
+  lastName          : String,
+  documentID        : { type : String },
+  email             : { type : String, unique : true, lowercase : true, trim : true },
+  vehiclePlate      : { type : String, trim : true },
+  phoneNumber       : { type : String, trim : true },
+  password          : String,
+  role              : { type : String, required : true, enum : roleTypes },
+  company           : { type : mongoose.Schema.Types.ObjectId, ref : 'company' }, // Mainly for agents and admins
+  property          : { type : mongoose.Schema.Types.ObjectId, ref : 'property' }, // Mainly for agent
+  profilePic        : String,
+  gender            : { type : String, enum : genderTypes },
+  address           : String,
+  trial             : Boolean,
+  firstTimeAccessed : { type : Boolean, default : false },
+  createdAt         : { type : Date, default : new Date() },
 });
 
 userSchema.pre('save', function hashPass (next) {

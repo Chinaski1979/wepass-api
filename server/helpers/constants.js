@@ -6,6 +6,7 @@ module.exports = {
   PUBLIC_ROUTES : [
     '/auth/login',
     '/auth/trialRegistration',
+    '/auth/firstTimeAccess',
   ],
   ADMIN_ROUTES : [
     '/auth/createAccount',

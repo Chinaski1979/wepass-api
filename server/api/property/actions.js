@@ -44,7 +44,9 @@ export default class PropertyActions {
     try {
       const propertyValidated = await propertyValidation(req.body);
       const newProperty = await PropertyModel.create(propertyValidated);
+      console.log(req.user);
       if (req.user.role === 'admin') newProperty.admins.push(req.user.userId);
+      await newProperty.save();
       res.created(null, newProperty, 'Created new property successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating new property');

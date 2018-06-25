@@ -191,9 +191,7 @@ export default class AuthActions {
       const userValidated = await userValidation(req.body);
       const newAccount = await createUser(userValidated);
       // Send email with first time passcode if account role is 'user'
-      if (newAccount.role === 'user') {
-        await sendFirstTimePasscode('marvin@wepass.io'); // newAccount.email 'cascante.george@gmail.com'
-      }
+      if (newAccount.role === 'user') await sendFirstTimePasscode(newAccount);
       res.created(null, newAccount, 'Created account successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating account');

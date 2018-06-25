@@ -199,6 +199,34 @@ export default class AuthActions {
     }
   }
 
+  /**
+   * @api {post} /auth/firstTimeAccess First time access
+   * @apiName firstTimeAccess
+   * @apiGroup auth
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {String} passcode
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       "_id"          : "5abc15530b0df40032fdd928",
+       "firstName"    : "David",
+       "lastName"     : "Bowie",
+       "documentID"   : "112880431",
+       "email"        : "bowie@gmail.com",
+       "vehiclePlate" : "FCK-666",
+       "phoneNumber"  : "70759009",
+       "role"         : "Admin",
+       "company"      : "5aebea94092fc5000d9c047a",
+       "unit"         : "566bxa94065fcwe10d2c90fh",
+       "profilePic"   : "String",
+       "gender"       : "Male",
+     }
+   */
   async firstTimeAccess (req, res) {
     try {
       const passCodeDoc = await FirstTimePasscodeModel.findOneAndRemove({passcode : req.body.passcode}).populate('user');

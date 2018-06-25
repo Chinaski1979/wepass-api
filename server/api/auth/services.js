@@ -48,7 +48,7 @@ export function sendFirstTimePasscode (userAccount) {
       const { passcode } = await generateFirstTimePasscode(userAccount._id);
       await buildEmailTemplate({
         from    : process.env.MG_FROM_EMAIL,
-        to      : 'cascante.george@gmail.com', // newAccount.email 'cascante.george@gmail.com'
+        to      : userAccount.email,
         subject : 'Código Inicial',
         title   : 'Código inicial de instalación',
         content : 'Después de instalar la aplicación en tu dispositivo deberás ingresar el siguiente código para poder accessar a la aplicación.',

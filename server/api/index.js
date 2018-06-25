@@ -8,7 +8,7 @@ const router = new Router();
  * @apiHeader (Headers) {String} Authorization JSON Web Token
  * @apiHeaderExample {json} Example
  *  {
- *    "Authorization": "Bearer: JWT_TOKEN"
+ *    "Authorization": "Bearer JWT_TOKEN"
  *  }
  *
  * @apiErrorExample {json} Authorization Error

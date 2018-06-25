@@ -54,7 +54,7 @@ export default class PropertyActions {
 
   /**
    * @api {put} /property/update/:propertyId Update a property
-   * @apiName create
+   * @apiName update
    * @apiGroup property
    * @apiVersion 1.0.0
    *

@@ -79,7 +79,7 @@ export default class IncidentsActions {
   */
   async incidentsByProperty (req, res) {
     try {
-      const incidents = await IncidentsModel.find({ property : req.params.propertyId });
+      const incidents = await IncidentsModel.find({ property : req.params.propertyId }).populated('createdBy occupant, unit');
       res.ok(null, incidents, 'Incidents retrieved successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error retrieving incidents');

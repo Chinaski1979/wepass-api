@@ -1,11 +1,13 @@
 import _ from 'lodash';
-import moment from 'moment';
 
 // Validations
 import { codeValidation } from './validations';
 
 // Services
 import { updateAccessCode, setUpAccessHistoryQuery } from './services'; // matchesParentProperties
+
+// Helpers
+import { getCurrentTime } from 'helpers/timeZone';
 
 // Models
 import AccessModel from './accessModel';
@@ -41,7 +43,7 @@ export default class AccessActions {
       const codeDetailsValidated = await codeValidation(req.body);
       codeDetailsValidated.createdBy = req.user.userId;
       codeDetailsValidated.accessCode = Math.floor(10000 + Math.random() * 9000);
-      codeDetailsValidated.createdAt = moment().utc().subtract(6, 'hours');
+      codeDetailsValidated.createdAt = getCurrentTime();
       console.log(codeDetailsValidated.unit);
       const unit = await UnitModel.findOne({ _id : codeDetailsValidated.unit }).select('parentProperty');
       console.log(unit);

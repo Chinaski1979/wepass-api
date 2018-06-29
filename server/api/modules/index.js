@@ -10,4 +10,8 @@ router.post('/create', actions.create);
 // GET Methods
 router.get('/byProperty/:propertyId', actions.byProperty);
 
+// Delete Methods
+router.delete('/:moduleId', actions.deleteById);
+
+
 export default router;

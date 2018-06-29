@@ -166,4 +166,28 @@ export default class PropertyActions {
       res.badRequest(err.message, null, 'Error retrieving admin properties.');
     }
   }
+
+  /**
+   * @api {delete} property/:propertyId Delete a property
+   * @apiName deleteById
+   * @apiGroup property
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+      "removed" : true
+     }
+  */
+  async deleteById (req, res) {
+    try {
+      await PropertyModel.deleteOne({ _id : req.params.propertyId });
+      res.ok(null, { removed : true }, 'Property deleted successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error deleting property');
+    }
+  }
 }

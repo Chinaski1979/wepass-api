@@ -12,4 +12,7 @@ router.post('/addAdmin', actions.addAdmin);
 router.get('/:companyId', actions.getById);
 router.get('/:companyId/properties', actions.getProperties);
 
+// Delete Methods
+router.delete('/:companyId', actions.deleteById);
+
 export default router;

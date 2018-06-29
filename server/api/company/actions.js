@@ -1,6 +1,9 @@
 // Services
 import { createNewCompany } from './services';
 
+// Validations
+import { companyValidation } from './validations';
+
 // Models
 import UserModel from '../auth/userModel';
 import CompanyModel from './companyModel';
@@ -42,6 +45,44 @@ export default class CompanyActions {
       res.created(null, newCompany, 'Created new company successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating new company');
+    }
+  }
+
+  /**
+   * @api {put} /company/update/:companyId Update company
+   * @apiName update
+   * @apiGroup company
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {String} name
+   * @apiParam {String} label
+   * @apiParam {String} phoneNumber
+   * @apiParam {String} country
+   * @apiParam {String} province
+   * @apiParam {String} address
+   * @apiParam {String} email
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       "_id"            : "5abc15530b0df40032fdd928",
+       "name"           : "Residencial X",
+       "company"        : "5add15530b0df40032fd3hfld"
+       "parentProperty" : "39id15530b3fdf0032fd34f5t",
+       "identifier"     : "Torre 1",
+     }
+  */
+  async update (req, res) {
+    try {
+      const newCompanyDetailsValidated = await companyValidation(req.body);
+      const query = {_id : req.params.companyId};
+      const updatedCompany = await CompanyModel.findOneAndUpdate(query, newCompanyDetailsValidated, { new : true });
+      res.ok(null, updatedCompany, 'Company updated successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error updating company');
     }
   }
 

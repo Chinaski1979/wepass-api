@@ -136,7 +136,7 @@ export default class UnitsActions {
   }
 
   /**
-   * @api {delete} property/:propertyId Delete a property
+   * @api {delete} property/:propertyId Delete a unit
    * @apiName deleteById
    * @apiGroup property
    * @apiVersion 1.0.0

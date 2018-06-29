@@ -44,6 +44,41 @@ export default class ModulesActions {
   }
 
   /**
+   * @api {put} /modules/update/:moduleId Update a module
+   * @apiName update
+   * @apiGroup modules
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {String} name
+   * @apiParam {String} company - Mongo _id. Avoid updating this value.
+   * @apiParam {String} parentProperty - Mongo _id. Avoid updating this value.
+   * @apiParam {String} identifier
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       "_id"            : "5abc15530b0df40032fdd928",
+       "name"           : "Residencial X",
+       "company"        : "5add15530b0df40032fd3hfld"
+       "parentProperty" : "39id15530b3fdf0032fd34f5t",
+       "identifier"     : "Torre 1",
+     }
+  */
+  async update (req, res) {
+    try {
+      const newModulesDetailsValidated = await moduleValidation(req.body);
+      const query = {_id : req.params.moduleId};
+      const updatedModule = await ModuleModel.findOneAndUpdate(query, newModulesDetailsValidated, { new : true });
+      res.ok(null, updatedModule, 'Module updated successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error updating module');
+    }
+  }
+
+  /**
    * @api {get} /modules/byProperty/:propertyId Get modules by property
    * @apiName byProperty
    * @apiGroup modules

@@ -14,4 +14,7 @@ router.put('/update/:unitId', actions.update);
 // GET Methods
 router.get('/byParentModule/:moduleId', actions.byParentModule);
 
+// Delete Methods
+router.delete('/:unitId', actions.deleteById);
+
 export default router;

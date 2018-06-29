@@ -134,4 +134,28 @@ export default class UnitsActions {
       res.badRequest(err.message, null, 'Error adding new ocupant');
     }
   }
+
+  /**
+   * @api {delete} property/:propertyId Delete a property
+   * @apiName deleteById
+   * @apiGroup property
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+      "removed" : true
+     }
+  */
+  async deleteById (req, res) {
+    try {
+      await UnitModel.deleteOne({ _id : req.params.unitId });
+      res.ok(null, { removed : true }, 'Unit deleted successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error deleting unit');
+    }
+  }
 }

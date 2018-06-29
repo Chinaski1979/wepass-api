@@ -93,6 +93,8 @@ export default class AccessActions {
       updateAccessCode(accessCode, agent);
       await accessCode.save();
 
+      // Assign a resolution code: 1 = success, 2 = missing information
+
       res.ok(null, accessCode, 'Verified access code successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error verifying access code');

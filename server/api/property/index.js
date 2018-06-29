@@ -14,4 +14,7 @@ router.put('/update/:propertyId', actions.update);
 // GET Methods
 router.post('/adminProperties', actions.adminProperties);
 
+// DELETE Methods
+router.delete('/:propertyId', actions.deleteById);
+
 export default router;

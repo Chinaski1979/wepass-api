@@ -117,7 +117,7 @@ export default class CompanyActions {
   }
 
   /**
-   * @api {post} /:companyId/properties Get all properties of a company
+   * @api {post} company/:companyId/properties Get all properties of a company
    * @apiName getProperties
    * @apiGroup company
    * @apiVersion 1.0.0
@@ -144,6 +144,30 @@ export default class CompanyActions {
       res.ok(null, properties, 'Properties retrieved successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error retrieving company');
+    }
+  }
+
+  /**
+   * @api {delete} company/:companyId Delete a company
+   * @apiName deleteById
+   * @apiGroup company
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+      "removed" : true
+     }
+  */
+  async deleteById (req, res) {
+    try {
+      await CompanyModel.deleteOne({ _id : req.params.companyId });
+      res.ok(null, { removed : true }, 'Property deleted successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error deleting company');
     }
   }
 }

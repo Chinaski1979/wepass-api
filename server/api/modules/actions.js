@@ -71,4 +71,28 @@ export default class ModulesActions {
       res.badRequest(err.message, null, 'Error retrieving property modules');
     }
   }
+
+  /**
+   * @api {delete} modules/:moduleId Delete a module
+   * @apiName deleteById
+   * @apiGroup modules
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+      "removed" : true
+     }
+  */
+  async deleteById (req, res) {
+    try {
+      await ModuleModel.deleteOne({ _id : req.params.moduleId });
+      res.ok(null, { removed : true }, 'Module deleted successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error deleting module');
+    }
+  }
 }

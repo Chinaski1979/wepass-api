@@ -68,11 +68,14 @@ export default class CompanyActions {
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK
      {
-       "_id"            : "5abc15530b0df40032fdd928",
-       "name"           : "Residencial X",
-       "company"        : "5add15530b0df40032fd3hfld"
-       "parentProperty" : "39id15530b3fdf0032fd34f5t",
-       "identifier"     : "Torre 1",
+       "_id"         : "5abc15530b0df40032fdd928",
+       "name"        : "Residencial X",
+       "company"     : "5add15530b0df40032fd3hfld"
+       "phoneNumber" :  "39id15530b3fdf0032fd34f5t",
+       "country"     : "CR",
+       "province"    : "San Jose",
+       "address"     : "San Pedro"
+       "email"       : "residnecialX@email.com"
      }
   */
   async update (req, res) {

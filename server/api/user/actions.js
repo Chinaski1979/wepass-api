@@ -30,7 +30,7 @@ export default class UserActions {
   */
   async searchUser (req, res) {
     try {
-      const user = await UserModel.find({ vehiclePlate : req.params.vehiclePlate});
+      const user = await UserModel.find({ vehiclePlate : req.params.vehiclePlate}).select('-password').lean();
       res.created(null, user, 'Created new unit successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error creating new unit');

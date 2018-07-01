@@ -45,5 +45,6 @@ router.use('/units', require('./units').default);
 router.use('/access', require('./access').default);
 router.use('/events', require('./event').default);
 router.use('/reporting', require('./reporting').default);
+router.use('/user', require('./user').default);
 
 export default router;

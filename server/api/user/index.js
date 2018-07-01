@@ -5,6 +5,6 @@ const router = new Router();
 const actions = new Actions();
 
 // GET Methods
-router.get('/search/:plate', actions.searchUser);
+router.get('/search/:vehiclePlate', actions.searchUser);
 
 export default router;

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { codeValidation } from './validations';
 
 // Services
-import { updateAccessCode, setUpAccessHistoryQuery } from './services'; // matchesParentProperties
+import { updateAccessCode, setUpAccessHistoryQuery, setResolutionCode } from './services'; // matchesParentProperties
 
 // Helpers
 import { getCurrentTime } from 'helpers/timeZone';
@@ -93,9 +93,10 @@ export default class AccessActions {
       updateAccessCode(accessCode, agent);
       await accessCode.save();
 
-      // Assign a resolution code: 1 = success, 2 = missing information
+      // Assign a resolution code: 1 = success, 2 = missing information, 3 = expired
+      const {resolutionCode, missingDetails} = setResolutionCode(accessCode);
 
-      res.ok(null, accessCode, 'Verified access code successfully');
+      res.ok(null, {resolutionCode, missingDetails, accessCode}, 'Verified access code successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error verifying access code');
     }

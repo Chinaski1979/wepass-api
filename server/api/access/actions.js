@@ -77,6 +77,8 @@ export default class AccessActions {
        "verified": true,
        "verifiedBy": {type : mongoose.Schema.Types.ObjectId, ref : 'user'},
        "verifiedAt": Date,
+       "resolutionCode": 2,
+       "missingDetails": ['firstName'],
      }
   */
   async verify (req, res) {

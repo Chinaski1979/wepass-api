@@ -84,6 +84,11 @@ export default class UserActions {
    * @apiUse authorizationHeaders
    * @apiUse applicationError
    *
+   * @apiParam {String} company - Query String Company _id
+   * @apiParam {String} parentProperty - Query String Propery _id
+   * @apiParam {String} parentModule - Query String Model _id
+   * @apiParam {String} _id - Query String Unit _id
+   *
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK
      {

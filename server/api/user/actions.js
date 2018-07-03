@@ -16,7 +16,7 @@ export default class UserActions {
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK
-     {
+     [{
        _id          : "5abc15530b0df40032fdd928",
        firstName    : "David",
        lastName     : "Bowie",
@@ -29,7 +29,7 @@ export default class UserActions {
        unit         : "566bxa94065fcwe10d2c90fh",
        profilePic   : "String",
        gender       : "Male",
-     }
+     }]
   */
   async searchUser (req, res) {
     try {
@@ -91,7 +91,7 @@ export default class UserActions {
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK
-     {
+     [{
        _id          : "5abc15530b0df40032fdd928",
        firstName    : "David",
        lastName     : "Bowie",
@@ -104,7 +104,7 @@ export default class UserActions {
        unit         : "566bxa94065fcwe10d2c90fh",
        profilePic   : "String",
        gender       : "Male",
-     }
+     }]
   */
   async searchByParentPremise (req, res) {
     try {

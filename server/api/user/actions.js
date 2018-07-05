@@ -76,7 +76,7 @@ export default class UserActions {
   }
 
   /**
-   * @api {post} /user/searchByParentPremise?parentProperty=5b03c19fcc89680009fa32aa Search user by _id parentPremise
+   * @api {get} /user/searchByParentPremise?parentProperty=5b03c19fcc89680009fa32aa&role=user Search user by _id parentPremise
    * @apiName searchByParentPremise
    * @apiGroup user
    * @apiVersion 1.0.0
@@ -88,6 +88,7 @@ export default class UserActions {
    * @apiParam {String} parentProperty - Query String Propery _id
    * @apiParam {String} parentModule - Query String Model _id
    * @apiParam {String} _id - Query String Unit _id
+   * @apiParam {String} role - One of user', 'guest', 'agent', 'admin', 'superAdmin
    *
    * @apiSuccessExample {json} Success
      HTTP/1.1 200 OK
@@ -108,9 +109,12 @@ export default class UserActions {
   */
   async searchByParentPremise (req, res) {
     try {
-      const result = await UnitModel.find(req.query).select('ocupants -_id').populate('occupants').lean();
+      const query = _.omit(req.query, ['role']);
+      const result = await UnitModel.find(query)
+        .select('ocupants -_id')
+        .populate('occupants').lean();
       const usersFromAllDocs = _.flatMap(result, 'occupants');
-      res.ok(null, usersFromAllDocs, 'Found users successfully');
+      res.ok(null, _.filter(usersFromAllDocs, { role : req.query.role }), 'Found users successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error finding users');
     }

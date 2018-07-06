@@ -48,7 +48,7 @@ export function sendFirstTimePasscode (userAccount) {
     try {
       const { passcode: userPasscode } = await generateFirstTimePasscode(userAccount._id);
       const emailBody = userAccount.role === 'agent'
-        ? 'Tu codigo para ingresar en wepass Agent.'
+        ? 'Tu código para ingresar en wepass Agent.'
         : 'Después de instalar la aplicación en tu dispositivo deberás ingresar el siguiente código para poder accessar a la aplicación.';
 
       const sendEmail = (email, body, passcode) => buildEmailTemplate({

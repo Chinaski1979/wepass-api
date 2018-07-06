@@ -119,4 +119,32 @@ export default class UserActions {
       res.badRequest(err.message, null, 'Error finding users');
     }
   }
+
+
+  /**
+   * @api {delete} /user/:userId
+   * @apiName delete
+   * @apiGroup user
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+      "deleted": true
+     }
+  */
+  async delete (req, res) {
+    try {
+      // Delete reference of user in Unit Schema
+      await UnitModel.update({ occupants : req.params.userId }, { $pull : { occupants : req.params.userId } });
+      // Finally delete user
+      await UserModel.deleteOne({_id : req.params.userId});
+      res.ok(null, {deleted : true}, 'Deleted user successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error deleting user');
+    }
+  }
 }

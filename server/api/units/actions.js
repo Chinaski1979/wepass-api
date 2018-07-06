@@ -139,7 +139,7 @@ export default class UnitsActions {
   /**
    * @api {delete} unit/:propertyId Delete a unit
    * @apiName deleteById
-   * @apiGroup property
+   * @apiGroup units
    * @apiVersion 1.0.0
    *
    * @apiUse authorizationHeaders
@@ -163,7 +163,7 @@ export default class UnitsActions {
   /**
    * @api {put} unit/empty/:unitId Remove all occupants
    * @apiName empty
-   * @apiGroup property
+   * @apiGroup units
    * @apiVersion 1.0.0
    *
    * @apiUse authorizationHeaders
@@ -181,7 +181,7 @@ export default class UnitsActions {
       await deleteManyUsers(unit.occupants);
       unit.occupants = [];
       await unit.save();
-      res.ok(null, { removed : true }, 'Unit emptied successfully');
+      res.ok(null, { emptied : true }, 'Unit emptied successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error emptying unit');
     }

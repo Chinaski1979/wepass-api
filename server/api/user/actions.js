@@ -138,8 +138,9 @@ export default class UserActions {
   */
   async delete (req, res) {
     try {
+      const { userId } = req.params;
       // Delete reference of user in Unit Schema
-      await UnitModel.update({ occupants : req.params.userId }, { $pull : { occupants : req.params.userId } });
+      await UnitModel.update({ occupants : userId }, { $pull : { occupants : userId } });
       // Finally delete user
       await UserModel.deleteOne({_id : req.params.userId});
       res.ok(null, {deleted : true}, 'Deleted user successfully');

@@ -10,6 +10,7 @@ router.post('/addOcupant', actions.addOcupant);
 
 // PUT Methods
 router.put('/update/:unitId', actions.update);
+router.put('/empty/:unitId', actions.empty);
 
 // GET Methods
 router.get('/byParentModule/:moduleId', actions.byParentModule);

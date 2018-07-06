@@ -1,5 +1,6 @@
 // Services
 import { updateUnitCount } from '../property/services';
+import { deleteManyUsers } from '../user/services';
 
 // Validations
 import { unitValidation } from './validations';
@@ -136,7 +137,7 @@ export default class UnitsActions {
   }
 
   /**
-   * @api {delete} property/:propertyId Delete a unit
+   * @api {delete} unit/:propertyId Delete a unit
    * @apiName deleteById
    * @apiGroup property
    * @apiVersion 1.0.0
@@ -156,6 +157,33 @@ export default class UnitsActions {
       res.ok(null, { removed : true }, 'Unit deleted successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error deleting unit');
+    }
+  }
+
+  /**
+   * @api {put} unit/empty/:unitId Remove all occupants
+   * @apiName empty
+   * @apiGroup property
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+      "emptied" : true
+     }
+  */
+  async empty (req, res) {
+    try {
+      const unit = await UnitModel.findOne({ _id : req.params.unitId });
+      await deleteManyUsers(unit.occupants);
+      unit.occupants = [];
+      await unit.save();
+      res.ok(null, { removed : true }, 'Unit emptied successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error emptying unit');
     }
   }
 }

@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 // Helpers
 import buildEmailTemplate from 'helpers/email';
+import sms from 'helpers/sms';
 
 // Services
 // import { userValidation } from './validations';
@@ -45,16 +46,37 @@ function generateFirstTimePasscode (userId) {
 export function sendFirstTimePasscode (userAccount) {
   return new Promise(async (resolve, reject) => {
     try {
-      const { passcode } = await generateFirstTimePasscode(userAccount._id);
-      await buildEmailTemplate({
+      const { passcode: userPasscode } = await generateFirstTimePasscode(userAccount._id);
+      const emailBody = userAccount.role === 'agent'
+        ? 'Tu codigo para ingresar en wepass Agent.'
+        : 'Después de instalar la aplicación en tu dispositivo deberás ingresar el siguiente código para poder accessar a la aplicación.';
+
+      const sendEmail = (email, body, passcode) => buildEmailTemplate({
         from    : process.env.MG_FROM_EMAIL,
-        to      : userAccount.email,
+        to      : email,
         subject : 'Código Inicial',
         title   : 'Código inicial de instalación',
-        content : 'Después de instalar la aplicación en tu dispositivo deberás ingresar el siguiente código para poder accessar a la aplicación.',
+        content : body,
         footer  : passcode.toString(),
       });
-      resolve();
+
+      if (userAccount.role === 'agent') {
+        if (!_.isEmpty(userAccount.email)) {
+          const emailResponse = await sendEmail(userAccount.email, emailBody, userPasscode);
+          resolve(emailResponse);
+        } else if (_.isEmpty(userAccount.email) && !_.isEmpty(userAccount.phoneNumber)) {
+          const smsResponse = await sms({
+            body : `Tu codigo para ingresar en wepass Agent: ${userPasscode.toString()}`,
+            from : process.env.TW_PHONE_NUMBER,
+            to   : userAccount.phoneNumber,
+          });
+
+          resolve(smsResponse);
+        }
+      } else {
+        const emailResponse = await sendEmail(userAccount.email, emailBody, userPasscode);
+        resolve(emailResponse);
+      }
     } catch (err) {
       reject(err);
     }

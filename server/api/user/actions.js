@@ -153,7 +153,7 @@ export default class UserActions {
   }
 
   /**
-   * @api {post} /user/:userId Update user
+   * @api {put} /user/:userId Update user
    * @apiName update
    * @apiGroup user
    * @apiVersion 1.0.0

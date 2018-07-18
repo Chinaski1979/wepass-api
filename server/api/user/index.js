@@ -12,4 +12,7 @@ router.get('/searchByParentPremise', actions.searchByParentPremise);
 // DELETE Methods
 router.delete('/:userId', actions.delete);
 
+// PUT Methods
+router.put('/:userId', actions.update);
+
 export default router;

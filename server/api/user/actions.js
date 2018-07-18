@@ -1,5 +1,8 @@
 import _ from 'lodash';
 
+// Services
+import { userValidation } from '../user/validations';
+
 // Models
 import UserModel from '../auth/userModel';
 import UnitModel from '../units/unitModel';
@@ -146,6 +149,42 @@ export default class UserActions {
       res.ok(null, {deleted : true}, 'Deleted user successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error deleting user');
+    }
+  }
+
+  /**
+   * @api {put} /user/:userId Update user
+   * @apiName update
+   * @apiGroup user
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     [{
+       firstName    : "David",
+       lastName     : "Bowie",
+       documentID   : "112880431",
+       email        : "bowie@gmail.com",
+       vehiclePlate : "FCK-666",
+       phoneNumber  : "70759009",
+       role         : "Admin",
+       company      : "5aebea94092fc5000d9c047a",
+       property     : "4jfibea9409fkjd5000d9crj94f",
+       profilePic   : "String",
+       gender       : "Male",
+     }]
+  */
+  async update (req, res) {
+    try {
+      const userDetailsValidatated = await userValidation(req.body);
+      const query = {_id : req.params.propertyId};
+      const updatedUser = await UserModel.findOneAndUpdate(query, userDetailsValidatated, { new : true });
+      res.ok(null, updatedUser, 'User updated successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error updating user');
     }
   }
 }

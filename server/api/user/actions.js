@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Services
-import { userValidation } from '../user/validations';
+import { userValidation } from '../auth/validations';
 
 // Models
 import UserModel from '../auth/userModel';

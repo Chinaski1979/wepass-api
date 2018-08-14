@@ -2,6 +2,10 @@ import _ from 'lodash';
 
 // Services
 import { userValidation } from '../auth/validations';
+import { sendResetLink } from './services';
+
+// Helpers
+import { verifyToken } from 'helpers/tokens';
 
 // Models
 import UserModel from '../auth/userModel';
@@ -185,6 +189,65 @@ export default class UserActions {
       res.ok(null, updatedUser, 'User updated successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error updating user');
+    }
+  }
+
+  /**
+   * @api {post} /user/sendResetPasswordEmail/:email Reser user password
+   * @apiName sendResetPasswordEmail
+   * @apiGroup user
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 200 OK
+     {
+       emailSent : true
+     }
+  */
+  async sendResetPasswordEmail (req, res) {
+    try {
+      const user = await UserModel.findOne({email : req.params.email}).select('email firstName, role').lean();
+      if (_.isNull(user)) {
+        throw Error('Email not found');
+      }
+      await sendResetLink(user);
+      res.ok(null, {emailSent : true}, 'Email for reseting password sent successfully');
+    } catch (err) {
+      console.log('err', err);
+      res.badRequest(err.message, null, 'Error sending email for password reset');
+    }
+  }
+
+  async resetPasswordForm (req, res) {
+    try {
+      const { token } = req.params;
+      const tokenDecoded = await verifyToken(token);
+      const user = await UserModel.findById(tokenDecoded.content.userId).select('firstName');
+      if (!user) {
+        throw Error('The user does not exist.');
+      }
+      res.render('pages/password', { user, token });
+    } catch (error) {
+      res.render('pages/password', { error });
+    }
+  }
+
+  async changePassword (req, res) {
+    try {
+      const { token } = req.params;
+      const tokenDecoded = await verifyToken(token);
+      const user = await UserModel.findOne({_id : tokenDecoded.content.userId});
+      user.password = req.body.password;
+      user.save();
+      if (!user) {
+        throw new Error('The user does not exist.');
+      }
+      res.ok(null, {passwordUpdated : true}, 'Password resetted successfully.');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error resetting password.');
     }
   }
 }

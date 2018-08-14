@@ -26,8 +26,9 @@ export function verifyToken (token, path) {
   });
 }
 
-function isPublicRoute (routes, path) {
-  return _.includes(routes, path);
+function isPublicRoute (path) {
+  const matchedRoute = _.find(PUBLIC_ROUTES, (route) => _.includes(path, route));
+  return _.includes(PUBLIC_ROUTES, matchedRoute);
 }
 
 function getParts (authorization) {
@@ -47,7 +48,7 @@ export async function authMidleware (req, res, next) {
       const { content } = await verifyToken(parts.token, req.path);
       _.set(req, 'user', content);
       next();
-    } else if (isPublicRoute(PUBLIC_ROUTES, req.path)) {
+    } else if (isPublicRoute(req.path)) {
       next();
     } else {
       res.unauthorized(null, null, 'Unauthorized transaction *.*');

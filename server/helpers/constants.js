@@ -7,6 +7,8 @@ module.exports = {
     '/auth/login',
     '/auth/trialRegistration',
     '/auth/firstTimeAccess',
+    '/user/resetPasswordForm',
+    '/user/sendResetPasswordEmail',
   ],
   ADMIN_ROUTES : [
     '/auth/createAccount',

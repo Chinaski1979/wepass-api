@@ -2,6 +2,7 @@ import express from 'express';
 import chalk from 'chalk';
 import mongoose from 'mongoose';
 
+
 const app = express();
 
 mongoose.Promise = global.Promise;
@@ -11,6 +12,9 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${proc
 
 // Static route for documentation
 app.use('/docs', express.static(`${__dirname}/docs`));
+
+app.set('view engine', 'ejs');
+app.set('views', `${__dirname}/views`);
 
 require('./config/express').default(app);
 require('./config/routes').default(app);

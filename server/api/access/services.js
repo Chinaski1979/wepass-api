@@ -41,7 +41,7 @@ function isCodeExpired (createdDate) {
 export function setResolutionCode (accessCode) {
   let resolutionCode;
   const necessaryDeets = ['firstName', 'lastName', 'documentID'];
-  const missingDetails = _.filter(necessaryDeets, deet => _.isUndefined(accessCode.visitor[deet]));
+  const missingDetails = _.filter(necessaryDeets, deet => _.isUndefined(accessCode.visitor[deet]) || accessCode.visitor[deet] === 'undefined');
   if (isCodeExpired(accessCode.createdAt)) {
     resolutionCode = 3;
   } else if (missingDetails.length) {

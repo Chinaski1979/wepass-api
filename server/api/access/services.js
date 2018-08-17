@@ -15,7 +15,7 @@ export function matchesParentProperties (accessCode, agent) {
 export function updateAccessCode (accessCode, agent) {
   accessCode.verified = true;
   accessCode.verifiedBy = agent._id;
-  accessCode.verifiedAt = moment().utc().subtract(6, 'hours');
+  accessCode.verifiedAt = getCurrentTime();
 }
 
 export function setUpAccessHistoryQuery (parentProperty, fromDate, toDate) {

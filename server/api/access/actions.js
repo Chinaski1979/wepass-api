@@ -44,9 +44,7 @@ export default class AccessActions {
       codeDetailsValidated.createdBy = req.user.userId;
       codeDetailsValidated.accessCode = Math.floor(10000 + Math.random() * 9000);
       codeDetailsValidated.createdAt = getCurrentTime();
-      console.log(codeDetailsValidated.unit);
       const unit = await UnitModel.findOne({ _id : codeDetailsValidated.unit }).select('parentProperty');
-      console.log(unit);
       codeDetailsValidated.parentProperty = unit.parentProperty;
       const accessCode = await AccessModel.create(codeDetailsValidated);
       res.created(null, accessCode, 'Created new access code successfully');
@@ -138,6 +136,56 @@ export default class AccessActions {
       res.ok(null, accessCodes, 'Retrieved access codes successfully');
     } catch (err) {
       res.badRequest(err.message, null, 'Error retrieving access codes');
+    }
+  }
+
+  /**
+   * @api {put} /access/update/:codeId Add visitor missing details
+   * @apiName update
+   * @apiGroup access
+   * @apiVersion 1.0.0
+   *
+   * @apiUse authorizationHeaders
+   * @apiUse applicationError
+   *
+   * @apiParam {string} firstName - Visitor Name
+   * @apiParam {string} lastName - Visitor last name
+   * @apiParam {string} documentID - Visitor ID
+   * @apiParam {string} email - Visitor email
+   * @apiParam {string} vehiclePlate - Visitor vehicle plate
+   * @apiParam {string} phoneNumber - Visitor phone number
+   *
+   * @apiSuccessExample {json} Success
+     HTTP/1.1 201 CREATED
+     {
+       "_id": "fu77dj5530b0df40032fdd928",
+       "unit": "5abc15530b0df4fu7dfdfjr78",
+       "visitor": {
+         _id          : "5abc15530b0df40032fdd928",
+         firstName    : "David",
+         lastName     : "Bowie",
+         documentID   : "112880431",
+         email        : "bowie@gmail.com",
+         vehiclePlate : "FCK-666",
+         phoneNumber  : "70759009",
+         role         : "Admin",
+         company      : "5aebea94092fc5000d9c047a",
+         unit         : "566bxa94065fcwe10d2c90fh",
+         profilePic   : "String",
+         gender       : "Male",
+       },
+       "createdBy": "fh5715530b0df4kkd2fdd9d8",
+       "accessCode": 381938,
+       "verified": false
+     }
+  */
+  async update (req, res) {
+    try {
+      const accessCode = await AccessModel.findOne({_id : req.params.codeId});
+      const updatedUser = await UserModel.findOneAndUpdate({_id : accessCode.visitor}, req.body, { new : true });
+      res.ok(null, Object.assign(accessCode, { visitor : updatedUser }), 'Updated access code successfully');
+    } catch (err) {
+      res.badRequest(err.message, null, 'Error updating access code');
     }
   }
 }

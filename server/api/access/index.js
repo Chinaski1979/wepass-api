@@ -9,6 +9,7 @@ router.post('/create', actions.create);
 router.post('/verify', actions.verify);
 router.post('/history', actions.history);
 
-// GET Methods
+// PUT Methods
+router.put('/:codeId', actions.update);
 
 export default router;

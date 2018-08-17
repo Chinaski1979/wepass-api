@@ -239,7 +239,7 @@ export default class AuthActions {
       if (passCodeDoc.user.role === 'agent') {
         user.password = passCodeDoc.passcode;
       }
-      
+
       await user.save();
       res.ok(null, passCodeDoc.user, 'Fist time passcode verified successfully');
     } catch (err) {

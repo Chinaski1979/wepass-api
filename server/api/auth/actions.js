@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Services
-import { createUser, sendFirstTimePasscode } from './services';
+import { createUser, sendFirstTimePasscode, emailExists } from './services';
 import { createNewCompany } from '../company/services';
 
 // Helpers
@@ -135,6 +135,10 @@ export default class AuthActions {
   async trialRegistration (req, res) {
     try {
       const { companyName, firstName, lastName, email, password } = req.body;
+      if (!_.isUndefined(email)) {
+        const emailFound = await emailExists(email);
+        if (!_.isNull(emailFound)) throw Error('Email already exists');
+      }
       const newCompany = await createNewCompany({ name : companyName });
       const userDetails = { firstName, lastName, email, password, role : 'admin', trial : true, company : newCompany._id };
       const newUser = await createUser(userDetails);
@@ -190,6 +194,10 @@ export default class AuthActions {
   async createAccount (req, res) {
     try {
       const userValidated = await userValidation(req.body);
+      if (!_.isUndefined(userValidated.email)) {
+        const emailFound = await emailExists(userValidated.email);
+        if (!_.isNull(emailFound)) throw Error('Email already exists');
+      }
       const newAccount = await createUser(userValidated);
       // Send email with first time passcode if account role is 'user'
       if (newAccount.role === 'user' || newAccount.role === 'agent') await sendFirstTimePasscode(newAccount);

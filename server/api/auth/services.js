@@ -82,3 +82,14 @@ export function sendFirstTimePasscode (userAccount) {
     }
   });
 }
+
+export function emailExists (email) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const emailFound = await UserModel.findOne({email});
+      resolve(emailFound);
+    } catch (err) {
+      reject();
+    }
+  });
+}
